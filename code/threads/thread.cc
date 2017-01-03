@@ -38,6 +38,10 @@ Thread::Thread (const char *threadName)
     stackTop = NULL;
     stack = NULL;
     status = JUST_CREATED;
+	// PART 1
+	// int ignoreOneCall = 1;
+	//Used for exercise in part 1
+	
 #ifdef USER_PROGRAM
     space = NULL;
     // FBT: Need to initialize special registers of simulator to 0
@@ -196,20 +200,26 @@ Thread::Finish ()
 void
 Thread::Yield ()
 {
-    Thread *nextThread;
-    IntStatus oldLevel = interrupt->SetLevel (IntOff);
+	//PART 1
+	/*if (ignoreOneCall)
+		ignoreOneCall = 0;
+	else{*/
+		Thread *nextThread;
+		IntStatus oldLevel = interrupt->SetLevel (IntOff);
 
-    ASSERT (this == currentThread);
+		ASSERT (this == currentThread);
 
-    DEBUG ('t', "Yielding thread \"%s\"\n", getName ());
+		DEBUG ('t', "Yielding thread \"%s\"\n", getName ());
 
-    nextThread = scheduler->FindNextToRun ();
-    if (nextThread != NULL)
-      {
-	  scheduler->ReadyToRun (this);
-	  scheduler->Run (nextThread);
-      }
-    (void) interrupt->SetLevel (oldLevel);
+		nextThread = scheduler->FindNextToRun ();
+		if (nextThread != NULL)
+		  {
+		  scheduler->ReadyToRun (this);
+		  scheduler->Run (nextThread);
+		  }
+		(void) interrupt->SetLevel (oldLevel);
+		/*ignoreOneCall = 1;
+	}*/
 }
 
 //----------------------------------------------------------------------

@@ -81,6 +81,10 @@ class Thread
     // THEY MUST be in this position for SWITCH to work.
     int *stackTop;		// the current stack pointer
     int machineState[MachineStateSize];	// all registers except for stackTop
+	
+	// PART 1
+	// int ignoreOneCall; 
+	//Used for exercise in part 1
 
   public:
       Thread (const char *debugName);	// initialize a Thread 
