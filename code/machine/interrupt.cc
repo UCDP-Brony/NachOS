@@ -248,6 +248,13 @@ Interrupt::Halt()
     Cleanup();     // Never returns.
 }
 
+#ifdef CHANGED
+	#ifdef USER_PROGRAM
+	void Interrupt::PutChar(char ch){
+		synchConsole->SynchPutChar(ch);
+	}
+	#endif //USER_PROGRAM
+#endif //CHANGED
 //----------------------------------------------------------------------
 // Interrupt::Schedule
 // 	Arrange for the CPU to be interrupted when simulated time

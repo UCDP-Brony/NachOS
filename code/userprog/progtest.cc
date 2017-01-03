@@ -11,6 +11,9 @@
 #include "copyright.h"
 #include "system.h"
 #include "console.h"
+#ifdef CHANGED
+#include "synchconsole.h"
+#endif //CHANGED
 #include "addrspace.h"
 #include "synch.h"
 
@@ -87,9 +90,67 @@ ConsoleTest (char *in, char *out)
       {
 	  readAvail->P ();	// wait for character to arrive
 	  ch = console->GetChar ();
+	  #ifdef CHANGED
+	  if (ch == EOF){	
+		return; // if EOF, quit without echo
+	  }
+	  if (ch != '\n'){
+		   console->PutChar ('<');
+			writeDone->P ();
+	  }
+	  #endif //CHANGED
 	  console->PutChar (ch);	// echo it!
 	  writeDone->P ();	// wait for write to finish
-	  if (ch == 'q')
-	      return;		// if q, quit
+	  #ifdef CHANGED
+	  if (ch != '\n'){
+		    console->PutChar ('>');
+			writeDone->P ();
+	  }
+	  #endif //CHANGED
+	  if (ch == 'q'){
+		  return;		// if q, quit
+	  }
+		  
       }
 }
+
+#ifdef CHANGED
+void SynchConsoleTest (char *in, char *out)
+{
+	
+	//V1
+	
+	/*
+	char ch;
+	SynchConsole *synchconsole = new SynchConsole(in, out);
+	while ((ch = synchconsole->SynchGetChar()) != EOF)
+		synchconsole->SynchPutChar(ch);
+	fprintf(stderr, "Solaris: EOF detected in SynchConsole!\n");
+	*/
+	
+	//V2
+	
+	char ch;
+	SynchConsole *synchconsole = new SynchConsole(in, out);
+
+    for (;;)
+      {
+	  ch = synchconsole->SynchGetChar();
+	  if (ch == EOF){	
+		return; // if EOF, quit without echo
+	  }
+	  if (ch != '\n'){
+		   synchconsole->SynchPutChar('<');
+	  }
+	  synchconsole->SynchPutChar(ch);	// echo it!
+	  if (ch != '\n'){
+		    synchconsole->SynchPutChar('>');
+	  }
+	  if (ch == 'q'){
+		  return;		// if q, quit
+	  }
+		  
+      }
+}
+#endif //CHANGED
+

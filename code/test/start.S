@@ -48,6 +48,14 @@ Halt:
 	syscall
 	j	$31
 	.end Halt
+	
+	.globl PutChar
+	.ent	PutChar
+PutChar:
+	addiu $2,$0,SC_PutChar
+	syscall
+	j	$31
+	.end PutChar
 
 	.globl Exit
 	.ent	Exit

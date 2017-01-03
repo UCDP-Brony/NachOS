@@ -92,7 +92,11 @@ class Interrupt {
 					// next interrupt
 
     void Halt(); 			// quit and print out stats
-    
+    #ifdef CHANGED
+		#ifdef USER_PROGRAM
+		void PutChar(char);
+		#endif //USER_PROGRAM
+	#endif //CHANGED
     void YieldOnReturn();		// cause a context switch on return 
 					// from an interrupt handler
 

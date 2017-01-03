@@ -14,6 +14,11 @@
 #include "scheduler.h"
 #include "interrupt.h"
 #include "stats.h"
+#ifdef CHANGED
+	#ifdef USER_PROGRAM
+	#include "synchconsole.h"
+	#endif //USER_PROGRAM
+#endif //CHANGED
 #include "timer.h"
 
 // Initialization and cleanup routines
@@ -32,6 +37,10 @@ extern Timer *timer;		// the hardware alarm clock
 #ifdef USER_PROGRAM
 #include "machine.h"
 extern Machine *machine;	// user program memory and registers
+	#ifdef CHANGED
+	extern SynchConsole *synchConsole;
+	#endif //CHANGED
+
 #endif
 
 #ifdef FILESYS_NEEDED		// FILESYS or FILESYS_STUB
