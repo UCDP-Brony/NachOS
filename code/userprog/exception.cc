@@ -93,7 +93,7 @@ void ExceptionHandler(ExceptionType which)
 				ASSERT(FALSE);
 			}
 		}
-	UpdatePC();
 	}
+	#endif // CHANGED
+	UpdatePC();
 }
-#endif // CHANGED
