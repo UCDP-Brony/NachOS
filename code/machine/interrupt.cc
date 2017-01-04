@@ -284,15 +284,13 @@ Interrupt::Halt()
 	void Interrupt::copyStringFromMachine( int from, char *to, unsigned size){
 		unsigned i;
 		bool lecturePossible = true;
-		for (i = 0; i < size; i++){
-			while(lecturePossible){
-				int *value = NULL; //TODO
-				if(machine->ReadMem(from+i,1,value))
-					to[i] = (char) (*value);
-				else{
-					lecturePossible = false;
-					to[i] = '\0';
-				}
+        int value [size];
+		for (i = 0; i < size && lecturePossible; i++){ 			
+			if(machine->ReadMem(from+i,1,(int*)value))
+				to[i] = (char) (*value);
+			else{
+				lecturePossible = false;
+				to[i] = '\0';
 			}
 		}
 		to[i] = '\0';

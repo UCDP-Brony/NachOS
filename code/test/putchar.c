@@ -6,7 +6,7 @@ void print(char c, int n)
 		PutChar(c+i);
 	}
 	PutChar('\n');
-	SynchPutString("C'est un succès \0");
+	SynchPutString("C'est un succès ! \n\0");
 }
 int main()
 {

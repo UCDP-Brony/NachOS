@@ -102,6 +102,11 @@ void ExceptionHandler(ExceptionType which)
 				//delete to;
 				break;
 			}
+			case SC_Exit: {
+				DEBUG('a', "Call to Exit\n");
+				printf("exiting\n");
+				break;
+			}
 			default: {
 				printf("Unexpected user mode exception %d %d\n", which, type);
 				ASSERT(FALSE);
