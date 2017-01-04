@@ -263,9 +263,9 @@ Interrupt::Halt()
 		bool lecturePossible = true;
 		for (i = 0; i < size; i++){
 			while(lecturePossible){
-				int *value;
+				int *value = NULL;
 				if(machine->ReadMem(from+i,1,value))
-					to[i] = (char) (value *);
+					to[i] = (char) (*value);
 				else{
 					lecturePossible = false;
 					to[i] = '\0';
