@@ -21,6 +21,11 @@
 #endif //CHANGED
 #include "timer.h"
 
+
+#ifdef USER_PROGRAM
+#define MAX_ STRING_ SIZE 255
+#endif //USER_PROGRAM
+
 // Initialization and cleanup routines
 extern void Initialize (int argc, char **argv);	// Initialization,
 						// called before anything else

@@ -56,6 +56,14 @@ PutChar:
 	syscall
 	j	$31
 	.end PutChar
+	
+	.globl copyStringFromMachine
+	.ent	copyStringFromMachine
+copyStringFromMachine:
+	addiu $2,$0,SC_copyStringFromMachine
+	syscall
+	j	$31
+	.end copyStringFromMachine
 
 	.globl Exit
 	.ent	Exit

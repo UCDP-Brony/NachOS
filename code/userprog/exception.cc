@@ -88,6 +88,12 @@ void ExceptionHandler(ExceptionType which)
 				interrupt->PutChar((char)machine->ReadRegister(4));
 				break;
 			}
+			case SC_copyStringFromMachine: {
+				DEBUG('a', "Call to copyStringFromMachine \n");
+				interrupt->copyStringFromMachine(machine->ReadRegister(4), (char *)machine->ReadRegister(5), (unsigned)machine->ReadRegister(6));
+				//copyStringFromMachine( int from, char *to, unsigned size);
+				break;
+			}
 			default: {
 				printf("Unexpected user mode exception %d %d\n", which, type);
 				ASSERT(FALSE);

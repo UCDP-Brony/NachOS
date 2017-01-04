@@ -51,4 +51,8 @@ void SynchConsole::SynchGetString(char *s, int n)
 		s[i] = SynchGetChar();
 	}
 }
+
+void copyStringFromMachine( int from, char *to, unsigned size){
+	
+}
 #endif // CHANGED

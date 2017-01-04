@@ -255,6 +255,27 @@ Interrupt::Halt()
 	}
 	#endif //USER_PROGRAM
 #endif //CHANGED
+
+#ifdef CHANGED
+	#ifdef USER_PROGRAM
+	void Interrupt::copyStringFromMachine( int from, char *to, unsigned size){
+		unsigned i;
+		bool lecturePossible = true;
+		for (i = 0; i < size; i++){
+			while(lecturePossible){
+				int* value;
+				if(ReadMem(from+i,1,value))
+					to[i] = (char*) value; // TODO : DEBUG
+				else
+					lecturePossible = false;
+			}
+		}
+		to[i] = '\0';
+	}
+	#endif //USER_PROGRAM
+#endif //CHANGED
+
+
 //----------------------------------------------------------------------
 // Interrupt::Schedule
 // 	Arrange for the CPU to be interrupted when simulated time

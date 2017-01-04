@@ -31,6 +31,7 @@
 #define SC_Yield	10
 #ifdef CHANGED
 #define SC_PutChar  11
+#define SC_copyStringFromMachine 12
 #endif //CHANGED
 
 #ifdef IN_USER_MODE
@@ -131,7 +132,12 @@ void Fork (void (*func) ());
  */
 void Yield ();
 
+#ifdef CHANGED
 void PutChar(char c);
+
+void copyStringFromMachine( int from, char *to, unsigned size);
+#endif //CHANGED
+
 
 #endif // IN_USER_MODE
 
