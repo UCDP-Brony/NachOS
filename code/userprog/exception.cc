@@ -104,7 +104,10 @@ void ExceptionHandler(ExceptionType which)
 			}
 			case SC_Exit: {
 				DEBUG('a', "Call to Exit\n");
-				printf("exiting\n");
+				int valReturn = machine->ReadRegister(4);
+				DEBUG('a',"Program finished with return value of %d \n",valReturn);
+				printf("exiting \n"); //Necessaire ?
+				interrupt->Halt();
 				break;
 			}
 			default: {
