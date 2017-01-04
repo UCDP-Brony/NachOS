@@ -236,6 +236,8 @@ Interrupt::Idle()
     Halt();
 }
 
+
+
 //----------------------------------------------------------------------
 // Interrupt::Halt
 // 	Shut down Nachos cleanly, printing out performance statistics.
@@ -248,10 +250,31 @@ Interrupt::Halt()
     Cleanup();     // Never returns.
 }
 
+//----------------------------------------------------------------------
+// Interrupt::Exit
+//----------------------------------------------------------------------
+#ifdef CHANGED
+	#ifdef USER_PROGRAM
+	void
+	Interrupt::Exit(int exitStatus)
+	{
+		//TODO
+	}
+	#endif //USER_PROGRAM
+#endif //CHANGED
+
 #ifdef CHANGED
 	#ifdef USER_PROGRAM
 	void Interrupt::PutChar(char ch){
 		synchConsole->SynchPutChar(ch);
+	}
+	#endif //USER_PROGRAM
+#endif //CHANGED
+
+#ifdef CHANGED
+	#ifdef USER_PROGRAM
+	void Interrupt::SynchPutString(const char* str){
+		synchConsole->SynchPutString(str);
 	}
 	#endif //USER_PROGRAM
 #endif //CHANGED
@@ -263,7 +286,7 @@ Interrupt::Halt()
 		bool lecturePossible = true;
 		for (i = 0; i < size; i++){
 			while(lecturePossible){
-				int *value = NULL;
+				int *value = NULL; //TODO
 				if(machine->ReadMem(from+i,1,value))
 					to[i] = (char) (*value);
 				else{

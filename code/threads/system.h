@@ -23,7 +23,7 @@
 
 
 #ifdef USER_PROGRAM
-#define MAX_ STRING_ SIZE 255
+#define MAX_STRING_SIZE 255
 #endif //USER_PROGRAM
 
 // Initialization and cleanup routines

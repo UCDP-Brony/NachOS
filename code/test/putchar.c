@@ -6,9 +6,14 @@ void print(char c, int n)
 		PutChar(c+i);
 	}
 	PutChar('\n');
+	SynchPutString("C'est un succès \0");
 }
 int main()
 {
 	print('a',4);
+	#ifdef CHANGED
+	return 0;
+	#else
 	Halt();
+	#endif //CHANGED
 }

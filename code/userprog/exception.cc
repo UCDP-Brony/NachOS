@@ -94,6 +94,14 @@ void ExceptionHandler(ExceptionType which)
 				//copyStringFromMachine( int from, char *to, unsigned size);
 				break;
 			}
+			case SC_SynchPutString: {
+				DEBUG('a', "Call to SynchPutString \n");
+				char to[MAX_STRING_SIZE]; //= malloc(sizeof(MAX_STRING_SIZE));
+				interrupt->copyStringFromMachine(machine->ReadRegister(4), to, MAX_STRING_SIZE);
+				interrupt->SynchPutString(to);
+				//delete to;
+				break;
+			}
 			default: {
 				printf("Unexpected user mode exception %d %d\n", which, type);
 				ASSERT(FALSE);

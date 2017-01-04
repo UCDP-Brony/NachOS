@@ -64,6 +64,14 @@ copyStringFromMachine:
 	syscall
 	j	$31
 	.end copyStringFromMachine
+	
+	.globl SynchPutString
+	.ent	SynchPutString
+SynchPutString:
+	addiu $2,$0,SC_SynchPutString
+	syscall
+	j	$31
+	.end SynchPutString
 
 	.globl Exit
 	.ent	Exit

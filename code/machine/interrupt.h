@@ -96,6 +96,8 @@ class Interrupt {
 		#ifdef USER_PROGRAM
 		void PutChar(char);
 		void copyStringFromMachine( int, char*, unsigned);
+		void SynchPutString(const char*);
+		void Exit(int);
 		#endif //USER_PROGRAM
 	#endif //CHANGED
     void YieldOnReturn();		// cause a context switch on return 

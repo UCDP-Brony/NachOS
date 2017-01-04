@@ -32,6 +32,7 @@
 #ifdef CHANGED
 #define SC_PutChar  11
 #define SC_copyStringFromMachine 12
+#define SC_SynchPutString 13
 #endif //CHANGED
 
 #ifdef IN_USER_MODE
@@ -136,6 +137,8 @@ void Yield ();
 void PutChar(char c);
 
 void copyStringFromMachine( int from, char *to, unsigned size);
+
+void SynchPutString(const char s[]);
 #endif //CHANGED
 
 
