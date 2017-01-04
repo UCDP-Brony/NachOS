@@ -131,20 +131,20 @@ void SynchConsoleTest (char *in, char *out)
 	//V2
 	
 	char ch;
-	SynchConsole *synchconsole = new SynchConsole(in, out);
+	//SynchConsole *synchconsole = new SynchConsole(in, out);
 
     for (;;)
       {
-	  ch = synchconsole->SynchGetChar();
+	  ch = synchConsole->SynchGetChar();
 	  if (ch == EOF){	
 		return; // if EOF, quit without echo
 	  }
 	  if (ch != '\n'){
-		   synchconsole->SynchPutChar('<');
+		   //synchConsole->SynchPutChar('<');
 	  }
-	  synchconsole->SynchPutChar(ch);	// echo it!
+	  synchConsole->SynchPutChar(ch);	// echo it!
 	  if (ch != '\n'){
-		    synchconsole->SynchPutChar('>');
+		    //synchConsole->SynchPutChar('>');
 	  }
 	  if (ch == 'q'){
 		  return;		// if q, quit
