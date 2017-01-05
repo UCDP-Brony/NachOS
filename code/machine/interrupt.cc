@@ -258,7 +258,7 @@ Interrupt::Halt()
 	void
 	Interrupt::Exit(int exitStatus)
 	{
-		//TODO
+		//Pas de traitement particulier, placeholder
 	}
 	#endif //USER_PROGRAM
 #endif //CHANGED
@@ -298,6 +298,67 @@ Interrupt::Halt()
 	#endif //USER_PROGRAM
 #endif //CHANGED
 
+#ifdef CHANGED
+	#ifdef USER_PROGRAM
+	void Interrupt::copyStringToMachine( int dest, char *str, unsigned size){
+		unsigned i;
+		bool endNotReached = true;
+		while (endNotReached && i<size){
+			if(str[i] == '\n' || str[i] == '\0')
+				endNotReached = false;
+			else{
+				machine->WriteMem(dest+i,1,(int)str[i]);
+				i++;
+			}
+		}
+		//end of string, adding a \0
+		machine->WriteMem(dest+i,1,(int)'\0');
+	}
+	#endif //USER_PROGRAM
+#endif //CHANGED
+
+/*
+#ifdef CHANGED
+	#ifdef USER_PROGRAM
+	char
+	Interrupt::SynchGetChar()
+	{
+		synchConsole->
+	}
+	#endif //USER_PROGRAM
+#endif //CHANGED
+
+
+#ifdef CHANGED
+	#ifdef USER_PROGRAM
+	void
+	Interrupt::SynchGetString(char *s, int n)
+	{
+		synchConsole->SynchGetString(char *s, int n);
+	}
+	#endif //USER_PROGRAM
+#endif //CHANGED
+
+#ifdef CHANGED
+	#ifdef USER_PROGRAM
+	void
+	Interrupt::SynchPutInt(int n)
+	{
+		synchConsole->SynchPutInt(int n);
+	}
+	#endif //USER_PROGRAM
+#endif //CHANGED
+
+#ifdef CHANGED
+	#ifdef USER_PROGRAM
+	void
+	Interrupt::SynchGetInt(int *n)
+	{
+		synchConsole->SynchGetInt(int *n);
+	}
+	#endif //USER_PROGRAM
+#endif //CHANGED
+*/
 
 //----------------------------------------------------------------------
 // Interrupt::Schedule

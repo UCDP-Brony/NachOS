@@ -96,10 +96,9 @@ void ExceptionHandler(ExceptionType which)
 			}
 			case SC_SynchPutString: {
 				DEBUG('a', "Call to SynchPutString \n");
-				char to[MAX_STRING_SIZE]; //= malloc(sizeof(MAX_STRING_SIZE));
+				char to[MAX_STRING_SIZE]; 
 				interrupt->copyStringFromMachine(machine->ReadRegister(4), to, MAX_STRING_SIZE);
 				interrupt->SynchPutString(to);
-				//delete to;
 				break;
 			}
 			case SC_Exit: {
@@ -109,6 +108,33 @@ void ExceptionHandler(ExceptionType which)
 				printf("exiting \n"); //Necessaire ?
 				interrupt->Halt();
 				break;
+			}
+			case SC_SynchGetChar: {
+				DEBUG('a', "Call to SynchGetChar \n");
+				machine->WriteRegister(2,synchConsole->SynchGetChar());
+				break;
+			}
+			case SC_SynchGetString:{
+				DEBUG('a', "Call to SynchGetChar \n");
+				char str[MAX_STRING_SIZE];
+				int l = machine->ReadRegister(5);
+				synchConsole->SynchGetString(str,l);
+				interrupt->copyStringToMachine(machine->ReadRegister(4),str,l);
+				break;
+				
+			}
+			case SC_SynchPutInt:{
+				synchConsole->SynchPutInt(machine->ReadRegister(4));
+				break;
+			}
+			case SC_SynchGetInt:{
+				int res;
+				synchConsole->SynchGetInt(&res);
+				//int = 2 octets sur anciennes machines, 4 sur 32 bits
+				//Probleme possible sur 64 bits, 8 octets, max 4
+				machine->WriteMem(machine->ReadRegister(4),sizeof(int),res);
+				break;
+				
 			}
 			default: {
 				printf("Unexpected user mode exception %d %d\n", which, type);

@@ -96,6 +96,7 @@ class Interrupt {
 		#ifdef USER_PROGRAM
 		void PutChar(char);
 		void copyStringFromMachine( int, char*, unsigned);
+		void copyStringToMachine( int, char*, unsigned);
 		void SynchPutString(const char*);
 		void Exit(int);
 		#endif //USER_PROGRAM
