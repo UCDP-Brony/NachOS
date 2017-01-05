@@ -111,15 +111,15 @@ void ExceptionHandler(ExceptionType which)
 			}
 			case SC_SynchGetChar: {
 				DEBUG('a', "Call to SynchGetChar \n");
-				machine->WriteRegister(2,synchConsole->SynchGetChar());
+				machine->WriteRegister(2,(int)synchConsole->SynchGetChar());
 				break;
 			}
 			case SC_SynchGetString:{
 				DEBUG('a', "Call to SynchGetChar \n");
 				char str[MAX_STRING_SIZE];
-				int l = machine->ReadRegister(5);
-				synchConsole->SynchGetString(str,l);
-				interrupt->copyStringToMachine(machine->ReadRegister(4),str,l);
+				int length = machine->ReadRegister(5);
+				synchConsole->SynchGetString(str,length);
+				interrupt->copyStringToMachine(machine->ReadRegister(4),str,length);
 				break;
 				
 			}
