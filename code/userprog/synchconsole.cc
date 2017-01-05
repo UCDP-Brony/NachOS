@@ -48,14 +48,17 @@ void SynchConsole::SynchGetString(char *s, int n)
 {
 	int i;
 	int end = 0;
+	char c;
 	for (i = 0; i < n && !end; i++){
-		s[i] = SynchGetChar();
-		if(s[i] == '\n')
-		{
+		c = SynchGetChar();
+		if (c==EOF)
 			end = 1;
-		}
+		else
+			s[i] = c;
+		if (c=='\0' || c =='\n')
+			end =1;
 	}
-	s[i+1] = '\0';
+	s[i] ='\0';
 }
 
 void SynchConsole::SynchPutInt(int n){
@@ -67,7 +70,7 @@ void SynchConsole::SynchPutInt(int n){
 void SynchConsole::SynchGetInt(int *n){
 	char str[MAX_STRING_SIZE];
 	SynchGetString(str,MAX_STRING_SIZE);
-	*n = (int) str;
+	*n = atoi(str);
 }
 
 #endif // CHANGED

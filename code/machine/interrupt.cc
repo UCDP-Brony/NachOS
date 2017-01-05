@@ -250,44 +250,16 @@ Interrupt::Halt()
     Cleanup();     // Never returns.
 }
 
-//----------------------------------------------------------------------
-// Interrupt::Exit
-//----------------------------------------------------------------------
-#ifdef CHANGED
-	#ifdef USER_PROGRAM
-	void
-	Interrupt::Exit(int exitStatus)
-	{
-		//Pas de traitement particulier, placeholder
-	}
-	#endif //USER_PROGRAM
-#endif //CHANGED
-
-#ifdef CHANGED
-	#ifdef USER_PROGRAM
-	void Interrupt::PutChar(char ch){
-		synchConsole->SynchPutChar(ch);
-	}
-	#endif //USER_PROGRAM
-#endif //CHANGED
-
-#ifdef CHANGED
-	#ifdef USER_PROGRAM
-	void Interrupt::SynchPutString(const char* str){
-		synchConsole->SynchPutString(str);
-	}
-	#endif //USER_PROGRAM
-#endif //CHANGED
 
 #ifdef CHANGED
 	#ifdef USER_PROGRAM
 	void Interrupt::copyStringFromMachine( int from, char *to, unsigned size){
 		unsigned i;
 		bool lecturePossible = true;
-        int value [size];
+        int value;
 		for (i = 0; i < size && lecturePossible; i++){ 			
-			if(machine->ReadMem(from+i,1,(int*)value))
-				to[i] = (char) (*value);
+			if(machine->ReadMem(from+i,1,&value))
+				to[i] = (char) value;
 			else{
 				lecturePossible = false;
 				to[i] = '\0';
@@ -317,48 +289,6 @@ Interrupt::Halt()
 	#endif //USER_PROGRAM
 #endif //CHANGED
 
-/*
-#ifdef CHANGED
-	#ifdef USER_PROGRAM
-	char
-	Interrupt::SynchGetChar()
-	{
-		synchConsole->
-	}
-	#endif //USER_PROGRAM
-#endif //CHANGED
-
-
-#ifdef CHANGED
-	#ifdef USER_PROGRAM
-	void
-	Interrupt::SynchGetString(char *s, int n)
-	{
-		synchConsole->SynchGetString(char *s, int n);
-	}
-	#endif //USER_PROGRAM
-#endif //CHANGED
-
-#ifdef CHANGED
-	#ifdef USER_PROGRAM
-	void
-	Interrupt::SynchPutInt(int n)
-	{
-		synchConsole->SynchPutInt(int n);
-	}
-	#endif //USER_PROGRAM
-#endif //CHANGED
-
-#ifdef CHANGED
-	#ifdef USER_PROGRAM
-	void
-	Interrupt::SynchGetInt(int *n)
-	{
-		synchConsole->SynchGetInt(int *n);
-	}
-	#endif //USER_PROGRAM
-#endif //CHANGED
-*/
 
 //----------------------------------------------------------------------
 // Interrupt::Schedule

@@ -8,16 +8,22 @@ void print(char c, int n)
 	
 	PutChar('\n');
 	SynchPutString("C'est un succès ! \n");
-	char test[5];
 	SynchPutString("Test GetChar ! \n");
 	char d;
 	d = SynchGetChar();
 	PutChar(d);
 	SynchPutString("Test GetString ! \n");
+	char test[5];
 	SynchGetString(test,5);
 	SynchPutString(test);
 	SynchPutString("Test des int ! \n");
-	int j = 0;
+	int j = 42;
+	SynchGetInt(&j);
+	SynchPutInt(j);
+	SynchPutString("Test des int ! \n");
+	SynchGetInt(&j);
+	SynchPutInt(j);
+	SynchPutString("Test des int ! \n");
 	SynchGetInt(&j);
 	SynchPutInt(j);
 }

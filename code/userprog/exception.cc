@@ -85,7 +85,7 @@ void ExceptionHandler(ExceptionType which)
 			}
 			case SC_PutChar: {
 				DEBUG('a', "Call to PutChar \n");
-				interrupt->PutChar((char)machine->ReadRegister(4));
+				synchConsole->SynchPutChar((char)machine->ReadRegister(4));
 				break;
 			}
 			case SC_copyStringFromMachine: {
@@ -98,7 +98,7 @@ void ExceptionHandler(ExceptionType which)
 				DEBUG('a', "Call to SynchPutString \n");
 				char to[MAX_STRING_SIZE]; 
 				interrupt->copyStringFromMachine(machine->ReadRegister(4), to, MAX_STRING_SIZE);
-				interrupt->SynchPutString(to);
+				synchConsole->SynchPutString(to);
 				break;
 			}
 			case SC_Exit: {
