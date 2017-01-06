@@ -1,0 +1,24 @@
+taille du buffer local à 255 caractères
+
+comportement de synchGetChar
+
+Renvoie le prochain caractère qui sera tapé. Attention, l'appui sur entrée compte comme un caractère qui sera enregistré, deux appels successifs de la forme c\n renverront c puis \n. Cela doit être géré par l'utilisateur.
+
+comportement de putChar
+
+affiche le caractère passé en argument
+
+comportement de synchGetInt
+le prochain entier saisi sera enregistré dans l'entier passé en argument. Un entier doit être saisi sinon on ne peut garantir le bon comportement de la fonction.
+
+comportement de synchPutInt
+affiche l'entier passé en paramètre
+
+comportement de synchGetString
+enregistre la prochaine chaine de caractère saisie à l'adresse passée en paramètre. Le deuxième paramètre permet de modifier la longueur maximale souhaitée pour la chaine (255 caractère maximum). Ajoute automatiquement un \0 en fin de chaine pour raison de sécurité. 
+
+comportement de synchPutString
+affiche la chaine de caractère passée en argument. La chaine doit se terminer par un \0
+
+comportement de feof
+renvoie vrai si le caractère actuel est une fin de fichier, faux sinon. Permet d'éviter des erreurs dues à des caractères speciaux.
