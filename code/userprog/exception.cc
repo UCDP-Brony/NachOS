@@ -136,6 +136,15 @@ void ExceptionHandler(ExceptionType which)
 				break;
 				
 			}
+			case SC_UserThreadCreate:{
+				/*int res;
+				synchConsole->SynchGetInt(&res);
+				//int = 2 octets sur anciennes machines, 4 sur 32 bits
+				//Probleme possible sur 64 bits, 8 octets, max 4
+				machine->WriteMem(machine->ReadRegister(4),sizeof(int),res);
+				break;*/
+				
+			}
 			default: {
 				printf("Unexpected user mode exception %d %d\n", which, type);
 				ASSERT(FALSE);
