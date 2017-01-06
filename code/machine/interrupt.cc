@@ -272,6 +272,7 @@ Interrupt::Halt()
 
 #ifdef CHANGED
 	#ifdef USER_PROGRAM
+<<<<<<< HEAD
 	void Interrupt::copyStringToMachine( int dest, char *str, unsigned size){
 		unsigned i = 0;
 		bool endNotReached = true;
@@ -281,6 +282,20 @@ Interrupt::Halt()
 			else{
 				machine->WriteMem(dest+i,1,(int)str[i]);
 				i++;
+=======
+	void Interrupt::copyStringFromMachine( int from, char *to, unsigned size){
+		unsigned i;
+		bool lecturePossible = true;
+		for (i = 0; i < size; i++){
+			while(lecturePossible){
+				int *value = NULL;
+				if(machine->ReadMem(from+i,1,value))
+					to[i] = (char) (*value);
+				else{
+					lecturePossible = false;
+					to[i] = '\0';
+				}
+>>>>>>> master
 			}
 		}
 		//end of string, adding a \0
