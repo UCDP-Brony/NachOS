@@ -149,3 +149,8 @@ Console::PutChar(char ch)
     interrupt->Schedule(ConsoleWriteDone, (int)this, ConsoleTime,
 					ConsoleWriteInt);
 }
+
+
+bool Console::Feof(){
+	return (incoming == EOF);
+}

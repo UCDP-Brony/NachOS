@@ -51,6 +51,7 @@ class Console {
 				// available, return it.  Otherwise, return EOF.
     				// "readHandler" is called whenever there is 
 				// a char to be gotten
+	bool Feof();//check if feof is reached
 
 // internal emulation routines -- DO NOT call these. 
     void WriteDone();	 	// internal routines to signal I/O completion

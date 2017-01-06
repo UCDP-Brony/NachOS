@@ -144,7 +144,7 @@ void copyStringFromMachine( int from, char *to, unsigned size);
 
 void SynchPutString(const char s[]);
 
-char SynchGetChar();
+int SynchGetChar();
 
 void SynchGetString(const char s[],int n);
 
