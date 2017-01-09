@@ -132,18 +132,11 @@ void SynchConsoleTest (char *in, char *out)
 	
 	char ch;
 	//SynchConsole *synchconsole = new SynchConsole(in, out);
-<<<<<<< HEAD
 
     for (;;)
       {
 	  ch = synchConsole->SynchGetChar();
-	  if (ch == EOF){	
-=======
-    for (;;)
-      {
-	  ch = synchConsole->SynchGetChar();
 	  if (ch == EOF){
->>>>>>> master
 		return; // if EOF, quit without echo
 	  }
 	  if (ch != '\n'){
