@@ -136,7 +136,7 @@ void SynchConsoleTest (char *in, char *out)
     for (;;)
       {
 	  ch = synchConsole->SynchGetChar();
-	  if (ch == EOF){	
+	  if (ch == EOF){
 		return; // if EOF, quit without echo
 	  }
 	  if (ch != '\n'){
