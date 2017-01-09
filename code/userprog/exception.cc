@@ -24,6 +24,9 @@
 #include "copyright.h"
 #include "system.h"
 #include "syscall.h"
+#ifdef CHANGED
+	#include "userthread.h"
+#endif //CHANGED
 
 //----------------------------------------------------------------------
 // UpdatePC : Increments the Program Counter register in order to resume
@@ -137,13 +140,25 @@ void ExceptionHandler(ExceptionType which)
 				
 			}
 			case SC_UserThreadCreate:{
-				/*int res;
-				synchConsole->SynchGetInt(&res);
-				//int = 2 octets sur anciennes machines, 4 sur 32 bits
-				//Probleme possible sur 64 bits, 8 octets, max 4
-				machine->WriteMem(machine->ReadRegister(4),sizeof(int),res);
-				break;*/
+				/*int f;
+				int arg;
+				printf("register 4 = %p, register 5 = %p \n",(int *)machine->ReadRegister(4),(int *) machine->ReadRegister(5));
+				bool isFunctionValid = machine->ReadMem(machine->ReadRegister(4),sizeof(int *),&f);
+				bool isFunctArgValid = true;
+				if(f != 0)
+					 isFunctArgValid = machine->ReadMem(machine->ReadRegister(5),sizeof(void*),&arg);
+				if(isFunctionValid && isFunctArgValid) {
+					machine->WriteRegister(2, do_UserThreadCreate(f, arg));
+				} else {
+					machine->WriteRegister(2,-1);
+				}*/
+				machine->WriteRegister(2, do_UserThreadCreate(machine->ReadRegister(4), machine->ReadRegister(5)));
+				break;
 				
+			}
+			case SC_UserThreadExit:{
+				//UserThreadExit();
+				break;
 			}
 			default: {
 				printf("Unexpected user mode exception %d %d\n", which, type);
