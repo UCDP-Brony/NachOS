@@ -43,22 +43,22 @@ int SynchConsole::SynchGetChar()
 {
 	reading->P();
 	readAvail->P ();	// wait for character to arrive
+	int tmp;
 	if (console->Feof())
-		return EOF;
+		tmp = EOF;
 	else
-		return console->GetChar ();
+		tmp = console->GetChar ();
 	reading->V();
+	return tmp;
 }
 
 void SynchConsole::SynchPutString(const char s[])
 {
 	int i = 0;
-	writing->P();
 	while (s[i] != '\0'){
 		SynchPutChar(s[i]);
 		i++;
 	}
-	writing->V();
 }
 
 void SynchConsole::SynchGetString(char *s, int n)
@@ -66,7 +66,6 @@ void SynchConsole::SynchGetString(char *s, int n)
 	int i;
 	int end = 0;
 	char c;
-	reading->P();
 	for (i = 0; i < n && !end; i++){
 		c = SynchGetChar();
 		if (c==EOF)
@@ -77,7 +76,6 @@ void SynchConsole::SynchGetString(char *s, int n)
 			end =1;
 	}
 	s[i] ='\0';
-	reading->V();
 }
 
 void SynchConsole::SynchPutInt(int n){
