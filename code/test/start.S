@@ -114,13 +114,13 @@ UserThreadCreate:
 	.end UserThreadCreate
 	
 	.globl UserThreadExit
-	.ent 	UserThreadExit
+	.ent	UserThreadExit
 UserThreadExit:
 	addiu $2,$0,SC_UserThreadExit
 	syscall
-	j 	$31
+	j	$31
 	.end UserThreadExit
-
+	
 	.globl Exit
 	.ent	Exit
 Exit:

@@ -24,18 +24,6 @@ static void StartUserThread(int f){
 	machine->WriteRegister (StackReg, spr - (PageSize*2));
 	//machine->WriteRegister (RetAddrReg, UserThreadExit);
 	machine->Run();
-
-	/*currentThread->space->InitRegisters();
-	currentThread->space->RestoreState();
-	currentThread->RestoreUserState();
-	ThreadArgs *arguments = (ThreadArgs*)f;
-	char * s = (char*)arguments->arg;
-	printf("DEBUG 2, %s\n", s);
-	void (*funct)(void*) = (void(*)(void*))arguments->function;
-	printf("DEBUG 3\n");
-	funct((void*)arguments->arg);
-	printf("DEBUG 4\n");
-	//UserThreadExit();*/
 }
 
 int do_UserThreadCreate(int f, int arg){
@@ -51,4 +39,8 @@ int do_UserThreadCreate(int f, int arg){
 	printf("DEBUG 5\n");
 
 	return 0;
+}
+
+void do_UserThreadExit(){
+	currentThread->Finish();
 }

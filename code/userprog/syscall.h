@@ -154,10 +154,9 @@ void SynchPutInt(int n);
 
 void SynchGetInt(int *n);
 
-int  UserThreadCreate(void (*) (void*), void *);
+int UserThreadCreate(void(f)(void *), void* arg);
 
 void UserThreadExit();
-
 
 #endif //CHANGED
 

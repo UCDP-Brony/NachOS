@@ -140,24 +140,12 @@ void ExceptionHandler(ExceptionType which)
 				
 			}
 			case SC_UserThreadCreate:{
-				/*int f;
-				int arg;
-				printf("register 4 = %p, register 5 = %p \n",(int *)machine->ReadRegister(4),(int *) machine->ReadRegister(5));
-				bool isFunctionValid = machine->ReadMem(machine->ReadRegister(4),sizeof(int *),&f);
-				bool isFunctArgValid = true;
-				if(f != 0)
-					 isFunctArgValid = machine->ReadMem(machine->ReadRegister(5),sizeof(void*),&arg);
-				if(isFunctionValid && isFunctArgValid) {
-					machine->WriteRegister(2, do_UserThreadCreate(f, arg));
-				} else {
-					machine->WriteRegister(2,-1);
-				}*/
 				machine->WriteRegister(2, do_UserThreadCreate(machine->ReadRegister(4), machine->ReadRegister(5)));
 				break;
 				
 			}
 			case SC_UserThreadExit:{
-				//UserThreadExit();
+				do_UserThreadExit();
 				break;
 			}
 			default: {
