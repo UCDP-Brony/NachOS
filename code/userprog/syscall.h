@@ -158,6 +158,8 @@ int UserThreadCreate(void(f)(void *), void* arg);
 
 void UserThreadExit();
 
+void UserThreadJoin();
+
 #endif //CHANGED
 
 

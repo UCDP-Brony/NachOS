@@ -148,6 +148,10 @@ void ExceptionHandler(ExceptionType which)
 				do_UserThreadExit();
 				break;
 			}
+			case SC_Join:{
+				do_UserThreadJoin();
+				break;
+			}
 			default: {
 				printf("Unexpected user mode exception %d %d\n", which, type);
 				ASSERT(FALSE);

@@ -2,6 +2,7 @@
 void testFunction(void * arg){
 	char * str = (char *)arg;
 	SynchPutString(str);
+	UserThreadExit();
 }
 
 int main(){
