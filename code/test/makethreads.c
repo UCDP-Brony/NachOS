@@ -11,7 +11,7 @@ void testFunction(void * arg){
 	}
 	//SynchPutString("After loop testFunction\n");
 	SynchPutString(str);
-	//UserThreadExit();
+	UserThreadExit();
 }
 
 int main(){

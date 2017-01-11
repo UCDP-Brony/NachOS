@@ -148,7 +148,8 @@ void ExceptionHandler(ExceptionType which)
 				do_UserThreadExit();
 				break;
 			}
-			case SC_Join:{
+			
+			case SC_UserThreadJoin:{
 				do_UserThreadJoin();
 				break;
 			}

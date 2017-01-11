@@ -39,6 +39,7 @@
 #define SC_SynchGetInt 17
 #define SC_UserThreadCreate 18
 #define SC_UserThreadExit 19
+#define SC_UserThreadJoin 20
 #endif //CHANGED
 
 #ifdef IN_USER_MODE

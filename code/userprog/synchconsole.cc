@@ -34,6 +34,8 @@ SynchConsole::~SynchConsole()
 	delete readAvail;
 	delete writing;
 	delete reading;
+	delete writingString;
+	delete readingString;
 }
 
 void SynchConsole::SynchPutChar(const char ch)
