@@ -83,6 +83,18 @@ void ExceptionHandler(ExceptionType which)
 		switch (type) {
 			case SC_Halt: {
 				DEBUG('a', "Shutdown, initiated by user program.\n");
+				Thread *tmp = scheduler->FindNextToRun();
+				Thread *firstThread = tmp;
+				do{
+					if(tmp->space == currentThread->space){
+						printf("DELETED thread %p!\n", tmp);
+						delete tmp;
+					} else {
+						scheduler->ReadyToRun(tmp);
+					}
+					tmp = scheduler->FindNextToRun();
+				}
+				while(tmp != firstThread && tmp != NULL);
 				interrupt->Halt();
 				break;
 			}
@@ -109,7 +121,7 @@ void ExceptionHandler(ExceptionType which)
 				int valReturn = machine->ReadRegister(4);
 				DEBUG('a',"Program finished with return value of %d \n",valReturn);
 				printf("exiting \n"); //Necessaire ?
-				interrupt->Halt();
+				//Halt();
 				break;
 			}
 			case SC_SynchGetChar: {

@@ -120,6 +120,10 @@ AddrSpace::AddrSpace (OpenFile * executable)
 			      noffH.initData.size, noffH.initData.inFileAddr);
       }
 
+    int i;
+    for(i = 0; i < MaxThreads; i++){
+        threads[i] = 0;
+    }
 }
 
 //----------------------------------------------------------------------
@@ -194,4 +198,35 @@ AddrSpace::RestoreState ()
 {
     machine->pageTable = pageTable;
     machine->pageTableSize = numPages;
+}
+
+
+/*
+
+    TODO :  Change the type of threads[] to a structure containing the address of
+            the thread and a Condition.
+            The other threads can thus add themselves to the Condition when they
+            syscall Join and the waited thread can broadcast its death to them.
+
+*/
+
+
+void AddrSpace::addThreadToList(Thread* t){
+    int i;
+    for(i=0;i<MaxThreads;i++){
+        if(threads[i] == 0){
+            threads[i] == (unsigned int)t;
+            return;
+        }
+    }
+}
+
+void AddrSpace::removeThreadFromList(Thread* t){
+    int i;
+    for(i=0;i<MaxThreads;i++){
+        if(threads[i] == (unsigned int)t){
+            threads[i] == 0;
+            return;
+        }
+    }
 }
