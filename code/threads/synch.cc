@@ -103,38 +103,69 @@ Semaphore::V ()
 // the test case in the network assignment won't work!
 Lock::Lock (const char *debugName)
 {
+	holder = NULL;
+	S = new Semaphore("mutex-like", 1);
 }
 
 Lock::~Lock ()
 {
+	delete S;
 }
 void
 Lock::Acquire ()
 {
+	S->P();
+	//have to save for checking later on release
+	holder = currentThread;
 }
 void
 Lock::Release ()
 {
+	//can't release for another thread, we have to check
+	if(holder == currentThread){
+		holder = NULL;
+		S->V();
+	}
+	//else do nothing
+	
 }
 
 Condition::Condition (const char *debugName)
 {
+	waitList = new List;
 }
 
 Condition::~Condition ()
 {
+	delete List;
 }
 void
 Condition::Wait (Lock * conditionLock)
 {
-    ASSERT (FALSE);
+    //have to check again
+	if(holder == currentThread){
+		Semaphore *S = new Semaphore("used to lock the thread",0);
+		waitList->Append(S);
+		S->P();
+	}
+	//else do nothing
 }
 
 void
 Condition::Signal (Lock * conditionLock)
 {
+	//have to check again
+	if(holder == currentThread && !waitList->isEmpty()){
+		//fetch the semaphore of a waiting thread, then increase it to free the locked thread
+		Semaphore *S = (Semaphore *)waitList->Remove();
+		S->V();
+	}
+	//else do nothing
 }
 void
 Condition::Broadcast (Lock * conditionLock)
 {
+	while(!waitList->isEmpty()){
+		this.Signal(conditionLock);
+	}
 }

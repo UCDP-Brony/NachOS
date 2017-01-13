@@ -87,6 +87,7 @@ class Lock
 
   private:
     const char *name;		// for debugging
+	void* holder;
     // plus some other stuff you'll need to define
 };
 
