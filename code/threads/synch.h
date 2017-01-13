@@ -88,6 +88,7 @@ class Lock
   private:
     const char *name;		// for debugging
 	void* holder;
+	Semaphore* S;
     // plus some other stuff you'll need to define
 };
 
@@ -144,6 +145,7 @@ class Condition
 
   private:
     const char *name;
+	List* waitList;
     // plus some other stuff you'll need to define
 };
 #endif // SYNCH_H

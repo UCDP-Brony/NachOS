@@ -137,25 +137,21 @@ Condition::Condition (const char *debugName)
 
 Condition::~Condition ()
 {
-	delete List;
+	delete waitList;
 }
 void
 Condition::Wait (Lock * conditionLock)
 {
-    //have to check again
-	if(holder == currentThread){
-		Semaphore *S = new Semaphore("used to lock the thread",0);
-		waitList->Append(S);
-		S->P();
-	}
-	//else do nothing
+	Semaphore *S = new Semaphore("used to lock the thread",0);
+	waitList->Append(S);
+	S->P();
 }
 
 void
 Condition::Signal (Lock * conditionLock)
 {
 	//have to check again
-	if(holder == currentThread && !waitList->isEmpty()){
+	if(!waitList->IsEmpty()){
 		//fetch the semaphore of a waiting thread, then increase it to free the locked thread
 		Semaphore *S = (Semaphore *)waitList->Remove();
 		S->V();
@@ -165,7 +161,7 @@ Condition::Signal (Lock * conditionLock)
 void
 Condition::Broadcast (Lock * conditionLock)
 {
-	while(!waitList->isEmpty()){
-		this.Signal(conditionLock);
+	while(!waitList->IsEmpty()){
+		Signal(conditionLock);
 	}
 }
