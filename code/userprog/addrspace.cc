@@ -240,7 +240,7 @@ ThreadCond* AddrSpace::findThreadInList(void* t){
         threadList[i].mutex->Acquire();
         if(threadList[i].thread == t){
             threadList[i].mutex->Release();
-            return (ThreadCond*)t;
+            return &threadList[i];
         }
         threadList[i].mutex->Release();
     }

@@ -64,6 +64,7 @@ void do_UserThreadJoin(unsigned int address){
 		tc->mutex->Acquire();
 		if(address == (unsigned int)tc->thread){
 			tc->cond->Wait(tc->mutex);
+			printf("After wait\n");
 		}
 		tc->mutex->Release();
 	}

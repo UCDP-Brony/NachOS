@@ -144,7 +144,9 @@ Condition::Wait (Lock * conditionLock)
 {
 	Semaphore *S = new Semaphore("used to lock the thread",0);
 	waitList->Append(S);
+	conditionLock->Release();
 	S->P();
+	conditionLock->Acquire();
 }
 
 void
