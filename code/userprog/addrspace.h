@@ -15,10 +15,16 @@
 
 #include "copyright.h"
 #include "filesys.h"
-#include "thread.h"
+#include "synch.h"
 
 #define UserStackSize		1024	// increase this as necessary!
-#define MaxThreads 20
+#define MaxThreads          20
+
+typedef struct {
+    void* thread;
+    Condition* cond;
+    Lock* mutex;
+} ThreadCond;
 
 class AddrSpace
 {
@@ -34,15 +40,16 @@ class AddrSpace
     void SaveState ();		// Save/restore address space-specific
     void RestoreState ();	// info on a context switch 
 
-    void addThreadToList(Thread*);
-    void removeThreadFromList(Thread*);
+    void addThreadToList(void* t);
+    void removeThreadFromList(void* t);
+    ThreadCond* findThreadInList(void* t);
 
   private:
     TranslationEntry * pageTable;	// Assume linear page table translation
     // for now!
     unsigned int numPages;	// Number of pages in the virtual 
     // address space
-    unsigned int threads[MaxThreads];
+    ThreadCond threadList[MaxThreads];
 };
 
 #endif // ADDRSPACE_H
