@@ -149,7 +149,6 @@ void ExceptionHandler(ExceptionType which)
 				//Probleme possible sur 64 bits, 8 octets, max 4
 				machine->WriteMem(machine->ReadRegister(4),sizeof(int),res);
 				break;
-				
 			}
 			case SC_UserThreadCreate:{
 				machine->WriteRegister(2, do_UserThreadCreate(machine->ReadRegister(4), machine->ReadRegister(5)));
@@ -162,7 +161,7 @@ void ExceptionHandler(ExceptionType which)
 			}
 			
 			case SC_UserThreadJoin:{
-				do_UserThreadJoin();
+				do_UserThreadJoin(machine->ReadRegister(4));
 				break;
 			}
 			default: {

@@ -3,6 +3,7 @@
 #include "syscall.h"
 #include "system.h"
 #include "synch.h"
+#include "addrspace.h"
 
 typedef struct ThreadArgs{
 	int function;
@@ -15,6 +16,7 @@ Semaphore *starting = new Semaphore("Starting Thread", 1);
 static void StartUserThread(int f){
 
 	starting->P();
+	currentThread->space->addThreadToList((void*)currentThread);
 	compteur++;
 	DEBUG('a', "Before InitRegisters");
 	currentThread->space->InitRegisters();
@@ -52,17 +54,26 @@ int do_UserThreadCreate(int f, int arg){
 	//currentThread->Sleep(); // if this is not commented then the first thread do what it is supposed to do, otherwise the adresses used later are corrupted
 	//printf("DEBUG 5\n");
 
-	return 0;
+	return (int)thread;
 }
 
-void do_UserThreadJoin(){
-	/*while(scheduler->FindNextToRun() != NULL){
-		currentThread->Yield();
-	}*/
-	interrupt->SetLevel(IntOff);
-	currentThread->Sleep();
+void do_UserThreadJoin(unsigned int address){
+	printf("id : %i\n", address);
+	ThreadCond *tc = currentThread->space->findThreadInList((void*) address);
+	if(tc != (void*)-1){
+		tc->mutex->Acquire();
+		if(address == (unsigned int)tc->thread){
+			tc->cond->Wait(tc->mutex);
+		}
+		tc->mutex->Release();
+	}
+	currentThread->Finish();
 }
 
 void do_UserThreadExit(){
+	ThreadCond *tc = currentThread->space->findThreadInList(currentThread);
+	tc->cond->Broadcast(tc->mutex);
+	printf("Thread %p exiting\n", currentThread);
+	currentThread->space->removeThreadFromList(currentThread);
 	currentThread->Finish();
 }

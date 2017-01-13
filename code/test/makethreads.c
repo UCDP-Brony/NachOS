@@ -15,14 +15,16 @@ void testFunction(void * arg){
 }
 
 int main(){
-	int i;
-	for(i = 0; i < 100000; i++){
-		UserThreadCreate(testFunction, (void *)0);
-		UserThreadCreate(testFunction, (void *)5);
-		UserThreadCreate(testFunction, (void *)10);
-		UserThreadCreate(testFunction, (void *)15);
-		UserThreadCreate(testFunction, (void *)20);
-	}
-		// UserThreadJoin();
-	Halt();
+	SynchPutString("Test ! \n");
+
+	int id = UserThreadCreate(testFunction, (void *)0);
+	UserThreadCreate(testFunction, (void *)5);
+	UserThreadCreate(testFunction, (void *)10);
+	UserThreadCreate(testFunction, (void *)15);
+	UserThreadCreate(testFunction, (void *)20);
+	SynchPutString("id : ");
+	SynchPutInt(id);
+	SynchPutString("\n");
+	UserThreadJoin(id);
+	return 0;
 }

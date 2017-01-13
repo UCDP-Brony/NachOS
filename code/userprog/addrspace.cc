@@ -120,9 +120,11 @@ AddrSpace::AddrSpace (OpenFile * executable)
 			      noffH.initData.size, noffH.initData.inFileAddr);
       }
 
-    int i;
+    // threadList = new ThreadCond()[MaxThreads];
     for(i = 0; i < MaxThreads; i++){
-        threads[i] = 0;
+        threadList[i].thread = (void*)-1;
+        threadList[i].cond = new Condition("Condition threadList "+i);
+        threadList[i].mutex = new Lock("Lock threadList "+i);
     }
 }
 
@@ -210,23 +212,37 @@ AddrSpace::RestoreState ()
 
 */
 
-
-void AddrSpace::addThreadToList(Thread* t){
+void AddrSpace::addThreadToList(void* t){
     int i;
     for(i=0;i<MaxThreads;i++){
-        if(threads[i] == 0){
-            threads[i] == (unsigned int)t;
+        threadList[i].mutex->Acquire();
+        if(threadList[i].thread == (void*)-1){
+            threadList[i].thread = t;
+            threadList[i].mutex->Release();
             return;
         }
+        threadList[i].mutex->Release();
     }
 }
 
-void AddrSpace::removeThreadFromList(Thread* t){
+void AddrSpace::removeThreadFromList(void* t){
+    ThreadCond* tc = findThreadInList(t);
+    if(tc != (void*)-1){
+        tc->mutex->Acquire();
+        tc->thread = (void*)-1;
+        tc->mutex->Release();
+    }
+}
+
+ThreadCond* AddrSpace::findThreadInList(void* t){
     int i;
     for(i=0;i<MaxThreads;i++){
-        if(threads[i] == (unsigned int)t){
-            threads[i] == 0;
-            return;
+        threadList[i].mutex->Acquire();
+        if(threadList[i].thread == t){
+            threadList[i].mutex->Release();
+            return (ThreadCond*)t;
         }
+        threadList[i].mutex->Release();
     }
+    return (ThreadCond*)-1;
 }
