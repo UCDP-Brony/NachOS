@@ -22,3 +22,9 @@ affiche la chaine de caractère passée en argument. La chaine doit se terminer pa
 
 comportement de feof
 renvoie vrai si le caractère actuel est une fin de fichier, faux sinon. Permet d'éviter des erreurs dues à des caractères speciaux.
+
+comportement de la classe Lock
+Comportement similaire à un mutex. Pour être fonctionnel Lock doit être initialisé. Si Lock n'est pas verrouillé, Acquire permet de prendre le verrou. Si le verrou est déjà pris le thread est mis en attente. Release permet de libèrer le verrou que l'on détient actuellement, seul le thread détenant le verrou peut lacher le verrou. Lors de la destruction du Lock le verrou doit avoir été relaché pour garantir un comportement cohérent.
+
+comportement de la classe Condition
+Comportement similaire à une condition. Pour être fonctionnelle Condition doit être initialisée, la politique de file mise en place est un file fifo. Wait place en attente dans la file et bloque le thread à l'aide d'un semaphore. Signal libère le premier thread en attente dans la file (politique fifo), sans effet si aucun thread n'est en attente. Broadcast libère tous les threads en attente dans la file, sans effet sinon. Lors de la destruction de la condition tous les threads en attente doivent avoir été libérés pour garantir un comportement cohérent.
