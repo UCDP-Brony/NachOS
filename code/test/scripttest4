@@ -1,0 +1,22 @@
+(
+cd ../build;
+
+echo "On passe un\"w\" en paramètre. Le programme doit nous rendre \"w\". Il nous rend : ";
+echo w | ./nachos-step3 -x ./testchar;
+echo "On passe un\"k\" en paramètre. Le programme doit nous rendre \"k\". Il nous rend : ";
+echo k | ./nachos-step3 -x ./testchar;
+echo "On passe un\"re\" en paramètre. Le programme doit renvoyer le premier caractère \"r\". Il nous rend : ";
+echo re | ./nachos-step3 -x ./testchar;
+
+echo "On passe un\"1\" en paramètre. Le programme doit nous rendre \"1\". Il nous rend : ";
+echo 1 | ./nachos-step3 -x ./testinteger;
+echo "On passe un\"12\" en paramètre. Le programme doit nous rendre \"12\". Il nous rend : ";
+echo 12 | ./nachos-step3 -x ./testinteger;
+echo "On passe un\"a\" en paramètre. Le programme doit renvoyer une erreur (0). Il nous rend : ";
+echo a | ./nachos-step3 -x ./testinteger;
+
+echo "On passe un \"Hello Chat!\# en paramètre. Le programme doit nous rendre \"Hello Chat!\". Il nous rend : ";
+echo "Hello Chat" | ./nachos-step3 -x ./teststring;
+)
+
+exit

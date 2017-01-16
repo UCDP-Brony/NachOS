@@ -5,6 +5,7 @@ int main(){
 	char d;
 	d = SynchGetChar();
 	PutChar(d);
+	PutChar('\n');
 	
 	return 0;
 }

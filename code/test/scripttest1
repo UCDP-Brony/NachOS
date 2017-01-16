@@ -1,0 +1,7 @@
+(
+cd ../build;
+echo "On passe un\"w\" en paramètre. Le programme doit nous rendre \"w\". Il nous rend : ";
+echo w | ./nachos-step3 -x ./testchar;
+)
+
+exit
