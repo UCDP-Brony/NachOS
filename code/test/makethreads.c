@@ -18,13 +18,18 @@ int main(){
 	SynchPutString("Test ! \n");
 
 	int id = UserThreadCreate(testFunction, (void *)0);
-	UserThreadCreate(testFunction, (void *)5);
+	int id2 = UserThreadCreate(testFunction, (void *)5);
 	UserThreadCreate(testFunction, (void *)10);
 	UserThreadCreate(testFunction, (void *)15);
 	UserThreadCreate(testFunction, (void *)20);
-	SynchPutString("id : ");
+	SynchPutString("wait id : ");
 	SynchPutInt(id);
 	SynchPutString("\n");
 	UserThreadJoin(id);
+
+	SynchPutString("wait id : ");
+	SynchPutInt(id2);
+	SynchPutString("\n");
+	UserThreadJoin(id2);
 	return 0;
 }

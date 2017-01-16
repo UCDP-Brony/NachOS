@@ -68,7 +68,6 @@ void do_UserThreadJoin(unsigned int address){
 		}
 		tc->mutex->Release();
 	}
-	currentThread->Finish();
 }
 
 void do_UserThreadExit(){

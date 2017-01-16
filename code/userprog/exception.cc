@@ -85,16 +85,18 @@ void ExceptionHandler(ExceptionType which)
 				DEBUG('a', "Shutdown, initiated by user program.\n");
 				Thread *tmp = scheduler->FindNextToRun();
 				Thread *firstThread = tmp;
-				do{
-					if(tmp->space == currentThread->space){
-						printf("DELETED thread %p!\n", tmp);
-						delete tmp;
-					} else {
-						scheduler->ReadyToRun(tmp);
+				if(tmp!=NULL){
+					do{
+						if(tmp->space == currentThread->space){
+							printf("DELETED thread %p!\n", tmp);
+							delete tmp;
+						} else {
+							scheduler->ReadyToRun(tmp);
+						}
+						tmp = scheduler->FindNextToRun();
 					}
-					tmp = scheduler->FindNextToRun();
+					while(tmp != firstThread && tmp != NULL);
 				}
-				while(tmp != firstThread && tmp != NULL);
 				interrupt->Halt();
 				break;
 			}
