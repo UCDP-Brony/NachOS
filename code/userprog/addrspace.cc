@@ -247,3 +247,16 @@ ThreadCond* AddrSpace::findThreadInList(void* t){
     }
     return (ThreadCond*)-1;
 }
+
+int AddrSpace::getThreadID(void* t){
+    int i;
+    for(i=0;i<MaxThreads;i++){
+        threadList[i].mutex->Acquire();
+        if(threadList[i].thread == t){
+            threadList[i].mutex->Release();
+            return i+1;
+        }
+        threadList[i].mutex->Release();
+    }
+    return -1;
+}

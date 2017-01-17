@@ -11,7 +11,7 @@ void testFunction(void * arg){
 	}
 	//SynchPutString("After loop testFunction\n");
 	SynchPutString(str);
-	UserThreadExit();
+	//UserThreadExit();
 }
 
 int main(){
@@ -25,11 +25,11 @@ int main(){
 	SynchPutString("wait id : ");
 	SynchPutInt(id);
 	SynchPutString("\n");
-	UserThreadJoin(id);
+	//UserThreadJoin(id);
 
 	SynchPutString("wait id : ");
 	SynchPutInt(id2);
 	SynchPutString("\n");
-	UserThreadJoin(id2);
+	//UserThreadJoin(id2);
 	return 0;
 }

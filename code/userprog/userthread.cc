@@ -28,7 +28,7 @@ static void StartUserThread(int f){
 	ThreadArgs * params = (ThreadArgs *)f;
 
 	int spr = machine->ReadRegister (StackReg);
-	machine->WriteRegister (StackReg, spr - ((PageSize*2)*compteur));
+	machine->WriteRegister (StackReg, spr - ((PageSize*2)*currentThread->space->getThreadID(currentThread)));
 
 	DEBUG('a', "Before WriteRegister");
 
@@ -55,7 +55,7 @@ int do_UserThreadCreate(int f, int arg){
 		thread->Fork(StartUserThread, (int)args);
 		currentThread->Yield();
 	} else {
-		thread = -1;
+		thread = (Thread*)-1;
 	}
 	verifying->V();	
 

@@ -43,6 +43,7 @@ class AddrSpace
     bool addThreadToList(void* t);
     void removeThreadFromList(void* t);
     ThreadCond* findThreadInList(void* t);
+    int getThreadID(void* t);
 
   private:
     TranslationEntry * pageTable;	// Assume linear page table translation
