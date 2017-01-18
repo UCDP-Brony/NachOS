@@ -6,6 +6,7 @@ void testFunction(void * arg){
 }
 
 int main(){
-	UserThreadCreate(testFunction, (void *)"Hello World !\n");
+	int id = UserThreadCreate(testFunction, (void *)"Hello World !\n");
+    UserThreadJoin(id);
 	return 0;
 }

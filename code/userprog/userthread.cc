@@ -46,25 +46,21 @@ int do_UserThreadCreate(int f, int arg){
 	args->function = f;
 	args->arg = arg;
 	Thread *thread = new Thread("thread utilisateur");
-	printf("Thread : %p\n", thread);
+	DEBUG('a',"Thread : %p\n", thread);
 	//printf("DEBUG 1\n");
 	thread->Fork(StartUserThread, (int)args);
-	//currentThread->Yield();
-	//interrupt->SetLevel(IntOff);
-	//currentThread->Sleep(); // if this is not commented then the first thread do what it is supposed to do, otherwise the adresses used later are corrupted
-	//printf("DEBUG 5\n");
-
+	currentThread->Yield();
 	return (int)thread;
 }
 
 void do_UserThreadJoin(unsigned int address){
-	printf("id : %i\n", address);
+	DEBUG('a',"id : %i\n", address);
 	ThreadCond *tc = currentThread->space->findThreadInList((void*) address);
 	if(tc != (void*)-1){
 		tc->mutex->Acquire();
 		if(address == (unsigned int)tc->thread){
 			tc->cond->Wait(tc->mutex);
-			printf("After wait\n");
+			DEBUG('a',"After wait\n");
 		}
 		tc->mutex->Release();
 	}
@@ -73,7 +69,7 @@ void do_UserThreadJoin(unsigned int address){
 void do_UserThreadExit(){
 	ThreadCond *tc = currentThread->space->findThreadInList(currentThread);
 	tc->cond->Broadcast(tc->mutex);
-	printf("Thread %p exiting\n", currentThread);
+	DEBUG('a',"Thread %p exiting\n", currentThread);
 	currentThread->space->removeThreadFromList(currentThread);
 	currentThread->Finish();
 }
