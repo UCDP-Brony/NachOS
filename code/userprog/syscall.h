@@ -40,6 +40,10 @@
 #define SC_UserThreadCreate 18
 #define SC_UserThreadExit 19
 #define SC_UserThreadJoin 20
+#define SC_SemCreate	  21
+#define SC_SemP			  22
+#define SC_SemV			  23
+#define SC_SemDestroy	  24
 #endif //CHANGED
 
 #ifdef IN_USER_MODE
@@ -141,6 +145,8 @@ void Fork (void (*func) ());
 void Yield ();
 
 #ifdef CHANGED
+typedef int sem_t; //used for semaphores
+
 void PutChar(char c);
 
 void copyStringFromMachine( int from, char *to, unsigned size);
@@ -160,6 +166,15 @@ int UserThreadCreate(void(f)(void *), void* arg);
 void UserThreadExit();
 
 void UserThreadJoin();
+
+sem_t SemCreate(int n);
+
+void SemP(sem_t s);
+
+void SemV(sem_t s);
+
+void SemDestroy(sem_t s);
+
 
 #endif //CHANGED
 

@@ -26,6 +26,7 @@
 #include "syscall.h"
 #ifdef CHANGED
 	#include "userthread.h"
+	#include "usersem.h"
 #endif //CHANGED
 
 //----------------------------------------------------------------------
@@ -164,6 +165,22 @@ void ExceptionHandler(ExceptionType which)
 			
 			case SC_UserThreadJoin:{
 				do_UserThreadJoin(machine->ReadRegister(4));
+				break;
+			}
+			case SC_SemCreate:{
+				machine->WriteRegister(2,userSem->do_SemCreate(machine->ReadRegister(4)));
+				break;
+			}
+			case SC_SemP:{
+				userSem->do_SemP(machine->ReadRegister(4));
+				break;
+			} 
+			case SC_SemV:{
+				userSem->do_SemV(machine->ReadRegister(4));
+				break;
+			}
+			case SC_SemDestroy:{
+				userSem->do_SemDestroy(machine->ReadRegister(4));
 				break;
 			}
 			default: {
