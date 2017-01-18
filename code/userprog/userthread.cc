@@ -78,5 +78,5 @@ void do_UserThreadExit(){
 	tc->cond->Broadcast(tc->mutex);
 	DEBUG('a',"Thread %p exiting\n", currentThread);
 	currentThread->space->removeThreadFromList(currentThread);
-	delete currentThread;
+	currentThread->Finish();
 }

@@ -17,6 +17,7 @@
 #ifdef CHANGED
 	#ifdef USER_PROGRAM
 	#include "synchconsole.h"
+	#include "frameprovider.h"
 	#endif //USER_PROGRAM
 #endif //CHANGED
 #include "timer.h"
@@ -24,6 +25,7 @@
 
 #ifdef USER_PROGRAM
 #define MAX_STRING_SIZE 255
+#define MAX_PHYSICAL_FRAMES 255
 #endif //USER_PROGRAM
 
 // Initialization and cleanup routines
@@ -44,6 +46,7 @@ extern Timer *timer;		// the hardware alarm clock
 extern Machine *machine;	// user program memory and registers
 	#ifdef CHANGED
 	extern SynchConsole *synchConsole;
+	extern FrameProvider *frameProvider;
 	#endif //CHANGED
 
 #endif
