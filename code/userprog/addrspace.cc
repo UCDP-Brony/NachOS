@@ -227,17 +227,18 @@ AddrSpace::RestoreState ()
 
 */
 
-void AddrSpace::addThreadToList(void* t){
+bool AddrSpace::addThreadToList(void* t){
     int i;
     for(i=0;i<MaxThreads;i++){
         threadList[i].mutex->Acquire();
         if(threadList[i].thread == (void*)-1){
             threadList[i].thread = t;
             threadList[i].mutex->Release();
-            return;
+            return true;
         }
         threadList[i].mutex->Release();
     }
+    return false;
 }
 
 void AddrSpace::removeThreadFromList(void* t){
@@ -260,4 +261,17 @@ ThreadCond* AddrSpace::findThreadInList(void* t){
         threadList[i].mutex->Release();
     }
     return (ThreadCond*)-1;
+}
+
+int AddrSpace::getThreadID(void* t){
+    int i;
+    for(i=0;i<MaxThreads;i++){
+        threadList[i].mutex->Acquire();
+        if(threadList[i].thread == t){
+            threadList[i].mutex->Release();
+            return i+1;
+        }
+        threadList[i].mutex->Release();
+    }
+    return -1;
 }

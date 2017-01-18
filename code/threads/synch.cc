@@ -98,19 +98,34 @@ Semaphore::V ()
     (void) interrupt->SetLevel (oldLevel);
 }
 
-// Dummy functions -- so we can compile our later assignments 
-// Note -- without a correct implementation of Condition::Wait(), 
-// the test case in the network assignment won't work!
+//----------------------------------------------------------------------
+// Lock::Lock
+// 		Initialize a mutex, so that it can be used for synchronization
+//      "debugName" is an arbitrary name, useful for debugging.
+//----------------------------------------------------------------------
+
 Lock::Lock (const char *debugName)
 {
 	holder = NULL;
 	S = new Semaphore("mutex-like", 1);
 }
 
+//----------------------------------------------------------------------
+// Lock::Lock
+//      De-allocate mutex, when no longer needed.  Assume no one
+//      is still waiting on the mutex!
+//----------------------------------------------------------------------
+
 Lock::~Lock ()
 {
 	delete S;
 }
+
+//----------------------------------------------------------------------
+// Lock::Acquire
+//		We have to save currentThread to make sure that no thread but us can release the lock
+//----------------------------------------------------------------------
+
 void
 Lock::Acquire ()
 {
@@ -118,6 +133,12 @@ Lock::Acquire ()
 	//have to save for checking later on release
 	holder = currentThread;
 }
+
+//----------------------------------------------------------------------
+// Lock::Release
+// 		Must be called after an Acquire has been done and by the thread who previously called it, otherwise nothing will happen
+//----------------------------------------------------------------------
+
 void
 Lock::Release ()
 {
@@ -130,15 +151,33 @@ Lock::Release ()
 	
 }
 
+//----------------------------------------------------------------------
+// Condition::Condition
+//		Initialize a condition, so that it can be used for synchronization
+//		"debugName" is an arbitrary name, useful for debugging.
+//----------------------------------------------------------------------
+
 Condition::Condition (const char *debugName)
 {
 	waitList = new List;
 }
 
+//----------------------------------------------------------------------
+// Condition::Condition
+//      De-allocate condition, when no longer needed.  Assume no one
+//      is still waiting on the condition!
+//----------------------------------------------------------------------
+
 Condition::~Condition ()
 {
 	delete waitList;
 }
+
+//----------------------------------------------------------------------
+// Condition::Wait
+//		"conditionLock" must be an initialized mutex, currently locked
+//----------------------------------------------------------------------
+
 void
 Condition::Wait (Lock * conditionLock)
 {
@@ -149,10 +188,15 @@ Condition::Wait (Lock * conditionLock)
 	conditionLock->Acquire();
 }
 
+//----------------------------------------------------------------------
+// Condition::Lock
+//		"conditionLock" currently not used, might require a fix later 
+//----------------------------------------------------------------------
+
 void
 Condition::Signal (Lock * conditionLock)
 {
-	//have to check again
+	//nothing to do if the list is empty
 	if(!waitList->IsEmpty()){
 		//fetch the semaphore of a waiting thread, then increase it to free the locked thread
 		Semaphore *S = (Semaphore *)waitList->Remove();
@@ -160,6 +204,12 @@ Condition::Signal (Lock * conditionLock)
 	}
 	//else do nothing
 }
+
+//----------------------------------------------------------------------
+// Condition::Broadcast
+//		"conditionLock" must be an initialized mutex, currently locked
+//----------------------------------------------------------------------
+
 void
 Condition::Broadcast (Lock * conditionLock)
 {
