@@ -39,6 +39,7 @@ PostOffice *postOffice;
 	#ifdef USER_PROGRAM
 	SynchConsole *synchConsole;
 	FrameProvider *frameProvider;
+	UserSem *userSem;
 	#endif
 #endif
 
@@ -166,6 +167,7 @@ Initialize (int argc, char **argv)
 	#ifdef CHANGED
 	synchConsole = new SynchConsole(NULL, NULL);
 	frameProvider = new FrameProvider(MAX_PHYSICAL_FRAMES);
+	userSem = new UserSem();
 	#endif //CHANGED
 #endif
 
@@ -199,6 +201,7 @@ Cleanup ()
 	#ifdef CHANGED
 	delete synchConsole;
 	delete frameProvider;
+	delete userSem;
 	#endif //CHANGED
 #endif
 
