@@ -12,6 +12,7 @@ public:
 	unsigned int GetEmptyFrame();
 	void ReleaseFrame(unsigned int);
 	int NumAvailFrame();
+	void setFrameRandom(bool);
 };
 
 

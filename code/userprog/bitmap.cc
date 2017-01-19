@@ -107,6 +107,40 @@ BitMap::Find ()
 }
 
 //----------------------------------------------------------------------
+// BitMap::RandomFind
+//      Return the number of a random bit which is clear.
+//      As a side effect, set the bit (mark it as in use).
+//      (In other words, find and allocate a random bit.)
+//
+//      If no bits are clear, return -1.
+//----------------------------------------------------------------------
+
+int BitMap::RandomFind()
+{
+	RandomInit((int) &numBits); //attempt at getting a random seed without the time lib
+	if (NumClear() > 0){
+		//free space avalaible
+		int freespace = 0;
+		int i;
+		unsigned int *freeaddress = new unsigned int[numBits];
+		for (i = 0; i<numBits;i++){
+			if(!Test(i)){
+				freeaddress[freespace] = i; //saving the addresses of free space in the map
+				freespace++;
+			}
+		}
+		int result = freeaddress[Random() % freespace];
+		Mark (result);
+		delete freeaddress;
+		return result;
+		
+	}
+	else
+		//no free space avalaible
+		return -1;
+}
+
+//----------------------------------------------------------------------
 // BitMap::NumClear
 //      Return the number of clear bits in the bitmap.
 //      (In other words, how many bits are unallocated?)

@@ -2,8 +2,11 @@
 #include "system.h"
 #include "syscall.h"
 
+bool frameRandom;
+
 FrameProvider::FrameProvider(int nbFrames){
 	bMap = new BitMap(nbFrames);
+	frameRandom = true;
 }
 
 FrameProvider::~FrameProvider(){
@@ -11,7 +14,16 @@ FrameProvider::~FrameProvider(){
 }
 
 unsigned int FrameProvider::GetEmptyFrame(){
-	unsigned int frameIndex = bMap->Find();
+	unsigned int frameIndex;
+	if(frameRandom){ 
+		//random
+		frameIndex = bMap->RandomFind();
+	}
+	else 
+	{
+		//vanilla
+		frameIndex = bMap->Find();
+	}
 	if((int)frameIndex != -1){
 		bzero( machine->mainMemory + (frameIndex*PageSize), PageSize);
 	}
@@ -24,4 +36,9 @@ void FrameProvider::ReleaseFrame(unsigned int frame){
 
 int FrameProvider::NumAvailFrame(){
 	return bMap->NumClear();
+}
+
+//possiblity to enable/disable random mode
+void setFrameRandom(bool b){
+	frameRandom = b;
 }
