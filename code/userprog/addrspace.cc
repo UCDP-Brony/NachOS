@@ -151,10 +151,13 @@ AddrSpace::AddrSpace (OpenFile * executable)
 
 AddrSpace::~AddrSpace ()
 {
-  // LB: Missing [] for delete
-  // delete pageTable;
-  delete [] pageTable;
-  // End of modification
+    // LB: Missing [] for delete
+    // delete pageTable;
+    for (unsigned int i = 0; i < numPages; i++){
+        frameProvider->ReleaseFrame(pageTable[i].physicalPage);
+    } 
+    delete [] pageTable;
+    // End of modification
 }
 
 //----------------------------------------------------------------------

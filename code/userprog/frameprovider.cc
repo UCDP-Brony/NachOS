@@ -1,5 +1,6 @@
 #include "frameprovider.h"
 #include "system.h"
+#include "syscall.h"
 
 bool frameRandom;
 
@@ -28,9 +29,11 @@ unsigned int FrameProvider::GetEmptyFrame(){
 	}
 	return frameIndex;
 }
+
 void FrameProvider::ReleaseFrame(unsigned int frame){
 	bMap->Clear(frame);
 }
+
 int FrameProvider::NumAvailFrame(){
 	return bMap->NumClear();
 }
