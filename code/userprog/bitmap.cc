@@ -130,6 +130,7 @@ int BitMap::RandomFind()
 			}
 		}
 		int result = freeaddress[Random() % freespace];
+		Mark (result);
 		delete freeaddress;
 		return result;
 		
