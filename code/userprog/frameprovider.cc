@@ -1,5 +1,6 @@
 #include "frameprovider.h"
 #include "system.h"
+#include "syscall.h"
 
 FrameProvider::FrameProvider(int nbFrames){
 	bMap = new BitMap(nbFrames);
@@ -16,9 +17,11 @@ unsigned int FrameProvider::GetEmptyFrame(){
 	}
 	return frameIndex;
 }
+
 void FrameProvider::ReleaseFrame(unsigned int frame){
 	bMap->Clear(frame);
 }
+
 int FrameProvider::NumAvailFrame(){
 	return bMap->NumClear();
 }
