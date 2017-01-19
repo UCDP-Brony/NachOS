@@ -162,6 +162,14 @@ SemDestroy:
 	.end SemDestroy
 	
 	
+	.globl ForkExec
+	.ent 	ForkExec
+ForkExec:
+	addiu $2,$0,SC_ForkExec
+	syscall
+	j 	$31
+	.end ForkExec
+
 	
 	.globl Exit
 	.ent	Exit

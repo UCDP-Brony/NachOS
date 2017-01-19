@@ -44,6 +44,7 @@
 #define SC_SemP			  22
 #define SC_SemV			  23
 #define SC_SemDestroy	  24
+#define SC_ForkExec		  25
 #endif //CHANGED
 
 #ifdef IN_USER_MODE
@@ -175,7 +176,7 @@ void SemV(sem_t s);
 
 void SemDestroy(sem_t s);
 
-
+int ForkExec(char *s);
 #endif //CHANGED
 
 

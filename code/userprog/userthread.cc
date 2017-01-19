@@ -4,11 +4,8 @@
 #include "system.h"
 #include "synch.h"
 #include "addrspace.h"
+#include "threadargs.h"
 
-typedef struct ThreadArgs{
-	int function;
-	int arg;
-}ThreadArgs;
 
 Semaphore *verifying = new Semaphore("Verifying Thread", 1);
 Semaphore *starting = new Semaphore("Starting Thread", 1);
@@ -75,8 +72,10 @@ void do_UserThreadJoin(unsigned int address){
 
 void do_UserThreadExit(){
 	ThreadCond *tc = currentThread->space->findThreadInList(currentThread);
-	tc->cond->Broadcast(tc->mutex);
-	DEBUG('a',"Thread %p exiting\n", currentThread);
-	currentThread->space->removeThreadFromList(currentThread);
-	currentThread->Finish();
+	if(tc != (void *)-1){
+		tc->cond->Broadcast(tc->mutex);
+		DEBUG('a',"Thread %p exiting\n", currentThread);
+		currentThread->space->removeThreadFromList(currentThread);
+		currentThread->Finish();
+	}
 }
