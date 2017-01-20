@@ -129,7 +129,7 @@ void ExceptionHandler(ExceptionType which)
 					interrupt->Halt();
 				} else {
 					scheduler->ReadyToRun(nextThread);
-					//delete currentThread->space;
+					delete currentThread->space;
 					currentThread->Finish();
 				}
 
