@@ -127,6 +127,8 @@ class PostOffice {
    				// packet has arrived and can be pulled
 				// off of network (i.e., time to call 
 				// PostalDelivery)
+				
+	bool IsOrigin();
 
   private:
     Network *network;		// Physical network connection

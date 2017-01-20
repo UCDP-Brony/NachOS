@@ -63,6 +63,7 @@ extern void StartProcess (char *file), ConsoleTest (char *in, char *out);
 extern void SynchConsoleTest (char *in, char *out);
 #endif
 extern void MailTest (int networkID);
+extern void CircleMail (int networkID);
 
 //----------------------------------------------------------------------
 // main
@@ -170,10 +171,19 @@ main (int argc, char **argv)
 	  if (!strcmp (*argv, "-o"))
 	    {
 		ASSERT (argc > 1);
-		Delay (2);	// delay for 2 seconds
+		Delay (5);	// delay for 10 seconds
 		// to give the user time to 
 		// start up another nachos
 		MailTest (atoi (*(argv + 1)));
+		argCount = 2;
+	    }
+	if (!strcmp (*argv, "-o2"))
+	    {
+		ASSERT (argc > 1);
+		Delay (5);	// delay for 10 seconds
+		// to give the user time to 
+		// start up another nachos
+		CircleMail (atoi (*(argv + 1)));
 		argCount = 2;
 	    }
 #endif // NETWORK

@@ -345,3 +345,10 @@ PostOffice::PacketSent()
     messageSent->V();
 }
 
+//----------------------------------------------------------------------
+//PostOffice::IsOrigin
+//
+//----------------------------------------------------------------------
+bool PostOffice::IsOrigin(){
+	return (0 == netAddr);
+}
