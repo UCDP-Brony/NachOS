@@ -87,7 +87,7 @@ void cleanUserThreads(){
 					firstThreadDeleted = true;
 				}
 
-				//printf("DELETED thread %p!\n", tmp);
+				printf("DELETED thread %p!\n", tmp);
 				delete tmp;
 			} else {
 				//printf("Putting thread back to scheduler list \n");
@@ -121,15 +121,15 @@ void ExceptionHandler(ExceptionType which)
 			case SC_Halt: {
 				DEBUG('a', "Shutdown, initiated by user program.\n");
 				cleanUserThreads();
+				scheduler->Print();
 				Thread* nextThread = scheduler->FindNextToRun();
 				//printf("nextThread = %p\n", nextThread);
 				//printf("currentThread = %p\n", currentThread);
 				if(nextThread == NULL){
-					// printf("Halting !\n");
+					printf("Halting !\n");
 					interrupt->Halt();
 				} else {
 					scheduler->ReadyToRun(nextThread);
-					delete currentThread->space;
 					currentThread->Finish();
 				}
 

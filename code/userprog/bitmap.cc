@@ -131,7 +131,6 @@ int BitMap::RandomFind()
 		}
 		int result = freeaddress[Random() % freespace];
 		Mark (result);
-		printf("Result = %i\n", result);
 		delete freeaddress;
 		return result;
 		
