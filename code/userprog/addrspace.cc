@@ -55,7 +55,7 @@ static void ReadAtVirtual(OpenFile *executable, int virtualaddr, int numBytes, i
     machine->pageTableSize = numPages;
 
     char * buffer = new char[numBytes];
-    int sizeToCopy = executable->ReadAt((char *) buffer, numBytes, position);
+    int sizeToCopy = executable->ReadAt(buffer, numBytes, position);
     for(int i = 0; i < sizeToCopy; i++){
         machine->WriteMem(virtualaddr+i,sizeof(char),(int)buffer[i]);
     }
@@ -120,20 +120,21 @@ AddrSpace::AddrSpace (OpenFile * executable)
 
 // zero out the entire address space, to zero the unitialized data segment 
 // and the stack segment
-    bzero (machine->mainMemory, size);
+
+    //bzero (machine->mainMemory, size);
 
 // then, copy in the code and data segments into memory
     if (noffH.code.size > 0)
       {
-	  DEBUG ('a', "Initializing code segment, at 0x%x, size %d\n",
-		 noffH.code.virtualAddr, noffH.code.size);
-	  ReadAtVirtual(executable, noffH.code.virtualAddr, noffH.code.size, noffH.code.inFileAddr, pageTable, numPages);
+      DEBUG ('a', "Initializing code segment, at 0x%x, size %d\n",
+         noffH.code.virtualAddr, noffH.code.size);
+      ReadAtVirtual(executable, noffH.code.virtualAddr, noffH.code.size, noffH.code.inFileAddr, pageTable, numPages);
       }
     if (noffH.initData.size > 0)
       {
 	  DEBUG ('a', "Initializing data segment, at 0x%x, size %d\n",
 		 noffH.initData.virtualAddr, noffH.initData.size);
-	  ReadAtVirtual(executable, noffH.initData.virtualAddr, noffH.initData.size, noffH.initData.inFileAddr, pageTable, numPages);
+      ReadAtVirtual(executable, noffH.initData.virtualAddr, noffH.initData.size, noffH.initData.inFileAddr, pageTable, numPages);
       }
 
     // threadList = new ThreadCond()[MaxThreads];
@@ -142,6 +143,7 @@ AddrSpace::AddrSpace (OpenFile * executable)
         threadList[i].cond = new Condition("Condition threadList "+i);
         threadList[i].mutex = new Lock("Lock threadList "+i);
     }
+
 }
 
 //----------------------------------------------------------------------
@@ -220,16 +222,6 @@ AddrSpace::RestoreState ()
     machine->pageTable = pageTable;
     machine->pageTableSize = numPages;
 }
-
-
-/*
-
-    TODO :  Change the type of threads[] to a structure containing the address of
-            the thread and a Condition.
-            The other threads can thus add themselves to the Condition when they
-            syscall Join and the waited thread can broadcast its death to them.
-
-*/
 
 bool AddrSpace::addThreadToList(void* t){
     int i;

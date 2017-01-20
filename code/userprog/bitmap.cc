@@ -117,7 +117,7 @@ BitMap::Find ()
 
 int BitMap::RandomFind()
 {
-	RandomInit((int) &numBits); //attempt at getting a random seed without the time lib
+	RandomInit((int) 100); //attempt at getting a random seed without the time lib
 	if (NumClear() > 0){
 		//free space avalaible
 		int freespace = 0;
@@ -131,6 +131,7 @@ int BitMap::RandomFind()
 		}
 		int result = freeaddress[Random() % freespace];
 		Mark (result);
+		printf("Result = %i\n", result);
 		delete freeaddress;
 		return result;
 		

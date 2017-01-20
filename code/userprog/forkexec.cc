@@ -8,13 +8,13 @@ void execProcess(int filenameAddress){
 	printf("File : %x\n", filenameAddress);
 	char * fileName = (char *)filenameAddress;
     OpenFile *executable = fileSystem->Open (fileName);
-    AddrSpace *space;
     if (executable == NULL)
     {
-	  synchConsole->SynchPutString("executable = NULL\n");
-	  return;
+      synchConsole->SynchPutString("executable = NULL\n");
+      return;
     }
 
+    AddrSpace *space;
     space = new AddrSpace (executable);
     currentThread->space = space;
     
@@ -30,9 +30,10 @@ void execProcess(int filenameAddress){
 }
 
 int do_ForkExec(char * filenameAddress){
+    printf("currentThread before Fork = %p\n", currentThread);
 	Thread *thread = new Thread("thread utilisateur");
-
-	thread->Fork(execProcess, (int)filenameAddress);
+    thread->Fork(execProcess, (int)filenameAddress);
 	currentThread->Yield();
+    printf("Forked thread = %p\n", thread);
 	return 0;
 }

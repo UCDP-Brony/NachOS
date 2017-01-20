@@ -14,8 +14,11 @@ void f(void *s){
 }
 
 int main(){
+	SynchPutString("In userpage 0\n");
 	int id = UserThreadCreate(f, (void  *) THIS);
+	SynchPutInt(id);
 	f((void *)THAT);
 	UserThreadJoin(id);
+	SynchPutString("Before return from userpage0\n");
 	return 0;
 }

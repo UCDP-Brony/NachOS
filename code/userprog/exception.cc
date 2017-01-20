@@ -72,17 +72,35 @@ UpdatePC ()
 void cleanUserThreads(){
 	Thread *tmp = scheduler->FindNextToRun();
 	Thread *firstThread = tmp;
+	bool firstThreadDeleted = false;
 	if(tmp!=NULL){
 		do{
+
+			if(firstThreadDeleted){
+				firstThread = tmp;
+				firstThreadDeleted = false;
+			}
+
 			if(tmp->space == currentThread->space){
-				printf("DELETED thread %p!\n", tmp);
+
+				if(tmp == firstThread){
+					firstThreadDeleted = true;
+				}
+
+				//printf("DELETED thread %p!\n", tmp);
 				delete tmp;
 			} else {
+				//printf("Putting thread back to scheduler list \n");
 				scheduler->ReadyToRun(tmp);
 			}
+
+			// printf("tmp = %p\n", tmp);
+			//printf("firstThread = %p\n", firstThread);
 			tmp = scheduler->FindNextToRun();
+
 		}
 		while(tmp != firstThread && tmp != NULL);
+		scheduler->ReadyToRun(tmp);
 	}
 }
 
@@ -103,7 +121,18 @@ void ExceptionHandler(ExceptionType which)
 			case SC_Halt: {
 				DEBUG('a', "Shutdown, initiated by user program.\n");
 				cleanUserThreads();
-				interrupt->Halt();
+				Thread* nextThread = scheduler->FindNextToRun();
+				//printf("nextThread = %p\n", nextThread);
+				//printf("currentThread = %p\n", currentThread);
+				if(nextThread == NULL){
+					// printf("Halting !\n");
+					interrupt->Halt();
+				} else {
+					scheduler->ReadyToRun(nextThread);
+					//delete currentThread->space;
+					currentThread->Finish();
+				}
+
 				break;
 			}
 			case SC_PutChar: {
@@ -129,8 +158,6 @@ void ExceptionHandler(ExceptionType which)
 				int valReturn = machine->ReadRegister(4);
 				DEBUG('a',"Program finished with return value of %d \n",valReturn);
 				printf("exiting \n"); //Necessaire ?
-				cleanUserThreads();
-				currentThread->Finish();
 				break;
 			}
 			case SC_SynchGetChar: {
