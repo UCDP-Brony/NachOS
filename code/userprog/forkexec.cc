@@ -5,7 +5,6 @@
 #include "threadargs.h"
 
 void execProcess(int filenameAddress){
-	printf("File : %x\n", filenameAddress);
 	char * fileName = (char *)filenameAddress;
     OpenFile *executable = fileSystem->Open (fileName);
     if (executable == NULL)
@@ -27,12 +26,8 @@ void execProcess(int filenameAddress){
 }
 
 int do_ForkExec(char * filenameAddress){
-    printf("currentThread before Fork = %p\n", currentThread);
 	Thread *thread = new Thread("thread processus");
     thread->Fork(execProcess, (int)filenameAddress);
-	//printf("File : %x\n", filenameAddress);
-    scheduler->Print();
     currentThread->Yield();
-    printf("Forked thread = %p\n", thread);
 	return 0;
 }

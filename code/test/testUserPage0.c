@@ -10,7 +10,6 @@ void testFunction(void * arg){
 }
 
 int main(){
-	SynchPutString("Entering Main\n");
 	int id = UserThreadCreate(testFunction, (void *)0);
 	int id2 = UserThreadCreate(testFunction, (void *)12);
 	UserThreadJoin(id);

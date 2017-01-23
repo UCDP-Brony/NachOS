@@ -50,7 +50,6 @@ int do_UserThreadCreate(int f, int arg){
 
 	if(currentThread->space->addThreadToList((void*)thread)){
 		DEBUG('t', "Thread %p starting\n", thread);
-		printf("Thread %p starting\n", thread);
 		thread->Fork(StartUserThread, (int)args);
 		currentThread->Yield();
 	} else {
@@ -69,7 +68,6 @@ void do_UserThreadJoin(unsigned int address){
 			DEBUG('t',"After wait\n");
 		}
 		tc->mutex->Release();
-		printf("Exiting Join\n");
 	}
 }
 

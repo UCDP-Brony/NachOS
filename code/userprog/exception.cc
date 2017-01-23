@@ -86,8 +86,6 @@ void cleanUserThreads(){
 				if(tmp == firstThread){
 					firstThreadDeleted = true;
 				}
-
-				printf("DELETED thread %p!\n", tmp);
 				delete tmp;
 			} else {
 				//printf("Putting thread back to scheduler list \n");
@@ -100,7 +98,9 @@ void cleanUserThreads(){
 
 		}
 		while(tmp != firstThread && tmp != NULL);
-		scheduler->ReadyToRun(tmp);
+		if(tmp!=NULL){
+			scheduler->ReadyToRun(tmp);
+		}
 	}
 }
 
@@ -124,7 +124,6 @@ void ExceptionHandler(ExceptionType which)
 				cleanUserThreads();
 				nbProcess--;
 				if(nbProcess == 0){
-					printf("Halting !\n");
 
 					semNbProcess->V();
 					interrupt->Halt();
@@ -157,7 +156,7 @@ void ExceptionHandler(ExceptionType which)
 				DEBUG('a', "Call to Exit\n");
 				int valReturn = machine->ReadRegister(4);
 				DEBUG('a',"Program finished with return value of %d \n",valReturn);
-				printf("exiting \n"); //Necessaire ?
+				DEBUG('a',"exiting \n"); //Necessaire ?
 				break;
 			}
 			case SC_SynchGetChar: {
