@@ -45,6 +45,44 @@ UpdatePC ()
     machine->WriteRegister (NextPCReg, pc);
 }
 
+//----------------------------------------------------------------------
+// cleanUserThreads
+//      Delete threads in the same address space as the exiting process.
+//
+//      Look for every thread in the same address space as the exiting process.
+//		Then delete them so the memory is freed.
+//----------------------------------------------------------------------
+
+void cleanUserThreads(){
+	Thread *tmp = scheduler->FindNextToRun();
+	Thread *firstThread = tmp;
+	bool firstThreadDeleted = false;
+	if(tmp!=NULL){
+		do{
+
+			if(firstThreadDeleted){
+				firstThread = tmp;
+				firstThreadDeleted = false;
+			}
+
+			if(tmp->space == currentThread->space){
+
+				if(tmp == firstThread){
+					firstThreadDeleted = true;
+				}
+				delete tmp;
+			} else {
+				scheduler->ReadyToRun(tmp);
+			}
+			tmp = scheduler->FindNextToRun();
+
+		}
+		while(tmp != firstThread && tmp != NULL);
+		if(tmp!=NULL){
+			scheduler->ReadyToRun(tmp);
+		}
+	}
+}
 
 //----------------------------------------------------------------------
 // ExceptionHandler
@@ -68,41 +106,6 @@ UpdatePC ()
 //      "which" is the kind of exception.  The list of possible exceptions 
 //      are in machine.h.
 //----------------------------------------------------------------------
-
-void cleanUserThreads(){
-	Thread *tmp = scheduler->FindNextToRun();
-	Thread *firstThread = tmp;
-	bool firstThreadDeleted = false;
-	if(tmp!=NULL){
-		do{
-
-			if(firstThreadDeleted){
-				firstThread = tmp;
-				firstThreadDeleted = false;
-			}
-
-			if(tmp->space == currentThread->space){
-
-				if(tmp == firstThread){
-					firstThreadDeleted = true;
-				}
-				delete tmp;
-			} else {
-				//printf("Putting thread back to scheduler list \n");
-				scheduler->ReadyToRun(tmp);
-			}
-
-			// printf("tmp = %p\n", tmp);
-			//printf("firstThread = %p\n", firstThread);
-			tmp = scheduler->FindNextToRun();
-
-		}
-		while(tmp != firstThread && tmp != NULL);
-		if(tmp!=NULL){
-			scheduler->ReadyToRun(tmp);
-		}
-	}
-}
 
 void ExceptionHandler(ExceptionType which)
 {
@@ -142,7 +145,6 @@ void ExceptionHandler(ExceptionType which)
 			case SC_copyStringFromMachine: {
 				DEBUG('a', "Call to copyStringFromMachine \n");
 				interrupt->copyStringFromMachine(machine->ReadRegister(4), (char *)machine->ReadRegister(5), (unsigned)machine->ReadRegister(6));
-				//copyStringFromMachine( int from, char *to, unsigned size);
 				break;
 			}
 			case SC_SynchPutString: {

@@ -22,14 +22,8 @@ int main(){
 	UserThreadCreate(testFunction, (void *)10);
 	UserThreadCreate(testFunction, (void *)15);
 	UserThreadCreate(testFunction, (void *)20);
-	SynchPutString("wait id : ");
-	SynchPutInt(id);
-	SynchPutString("\n");
-	//UserThreadJoin(id);
-
-	SynchPutString("wait id : ");
-	SynchPutInt(id2);
-	SynchPutString("\n");
-	//UserThreadJoin(id2);
+	
+	UserThreadJoin(id);
+	UserThreadJoin(id2);
 	return 0;
 }
