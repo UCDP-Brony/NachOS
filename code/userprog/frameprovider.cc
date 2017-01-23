@@ -6,7 +6,7 @@ bool frameRandom;
 
 FrameProvider::FrameProvider(int nbFrames){
 	bMap = new BitMap(nbFrames);
-	frameRandom = true;
+	frameRandom = false;
 }
 
 FrameProvider::~FrameProvider(){

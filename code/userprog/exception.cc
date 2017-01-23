@@ -158,6 +158,7 @@ void ExceptionHandler(ExceptionType which)
 				DEBUG('a', "Call to Exit\n");
 				int valReturn = machine->ReadRegister(4);
 				DEBUG('a',"Program finished with return value of %d \n",valReturn);
+				cleanUserThreads();
 				DEBUG('a',"exiting \n"); //Necessaire ?
 				break;
 			}
