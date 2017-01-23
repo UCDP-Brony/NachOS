@@ -4,6 +4,13 @@
 #include "addrspace.h"
 #include "threadargs.h"
 
+
+//----------------------------------------------------------------------
+// execProcess (int filenameAddress)
+//      initialises the address space of the new thread by loading the 
+//      program found at filenameAddress then runs the program. 
+//      Warns the user if the program is invalid.
+//----------------------------------------------------------------------
 void execProcess(int filenameAddress){
 	char * fileName = (char *)filenameAddress;
     OpenFile *executable = fileSystem->Open (fileName);
@@ -25,6 +32,10 @@ void execProcess(int filenameAddress){
     // by doing the syscall "exit"
 }
 
+//----------------------------------------------------------------------
+// do_ForkExec (char * filenameAddress)
+//      Creates a new Thread that will run the program found at filenameAddress.
+//----------------------------------------------------------------------
 int do_ForkExec(char * filenameAddress){
 	Thread *thread = new Thread("thread processus");
     thread->Fork(execProcess, (int)filenameAddress);

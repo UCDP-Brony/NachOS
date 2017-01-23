@@ -108,8 +108,8 @@ AddrSpace::AddrSpace (OpenFile * executable)
 
     for (i = 0; i < numPages; i++)
       {
-	  pageTable[i].virtualPage = i;	// for now, virtual page # = phys page #
-	  pageTable[i].physicalPage = frameProvider->GetEmptyFrame();
+	  pageTable[i].virtualPage = i;	
+	  pageTable[i].physicalPage = frameProvider->GetEmptyFrame();      // We now use our memory manager.
 	  pageTable[i].valid = TRUE;
 	  pageTable[i].use = FALSE;
 	  pageTable[i].dirty = FALSE;
@@ -156,7 +156,7 @@ AddrSpace::~AddrSpace ()
     // LB: Missing [] for delete
     // delete pageTable;
     for (unsigned int i = 0; i < numPages; i++){
-        frameProvider->ReleaseFrame(pageTable[i].physicalPage);
+        frameProvider->ReleaseFrame(pageTable[i].physicalPage); // update the memory manager
     } 
     delete [] pageTable;
     // End of modification
