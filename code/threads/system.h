@@ -50,6 +50,8 @@ extern Machine *machine;	// user program memory and registers
 	extern SynchConsole *synchConsole;
 	extern FrameProvider *frameProvider;
 	extern UserSem *userSem;
+	extern int nbProcess;
+	extern Semaphore *semNbProcess;
 	#endif //CHANGED
 
 #endif

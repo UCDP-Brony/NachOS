@@ -40,6 +40,8 @@ PostOffice *postOffice;
 	SynchConsole *synchConsole;
 	FrameProvider *frameProvider;
 	UserSem *userSem;
+	Semaphore *semNbProcess;
+	int nbProcess;
 	#endif
 #endif
 
@@ -168,6 +170,8 @@ Initialize (int argc, char **argv)
 	synchConsole = new SynchConsole(NULL, NULL);
 	frameProvider = new FrameProvider(MAX_PHYSICAL_FRAMES);
 	userSem = new UserSem();
+	semNbProcess = new Semaphore("Semaphore nbProcess", 1);
+	nbProcess = 1; //there is the main thread.
 	#endif //CHANGED
 #endif
 

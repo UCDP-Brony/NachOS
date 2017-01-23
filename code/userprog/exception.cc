@@ -120,16 +120,16 @@ void ExceptionHandler(ExceptionType which)
 		switch (type) {
 			case SC_Halt: {
 				DEBUG('a', "Shutdown, initiated by user program.\n");
+				semNbProcess->P();
 				cleanUserThreads();
-				scheduler->Print();
-				Thread* nextThread = scheduler->FindNextToRun();
-				//printf("nextThread = %p\n", nextThread);
-				//printf("currentThread = %p\n", currentThread);
-				if(nextThread == NULL){
+				nbProcess--;
+				if(nbProcess == 0){
 					printf("Halting !\n");
+
+					semNbProcess->V();
 					interrupt->Halt();
 				} else {
-					scheduler->ReadyToRun(nextThread);
+					semNbProcess->V();
 					currentThread->Finish();
 				}
 
@@ -217,6 +217,9 @@ void ExceptionHandler(ExceptionType which)
 				break;
 			}
 			case SC_ForkExec:{
+				semNbProcess->P();
+				nbProcess++;
+				semNbProcess->V();
 				char to[MAX_STRING_SIZE]; 
 				interrupt->copyStringFromMachine(machine->ReadRegister(4), to, MAX_STRING_SIZE);
 				machine->WriteRegister(2,do_ForkExec(to));
