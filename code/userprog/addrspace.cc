@@ -96,12 +96,12 @@ AddrSpace::AddrSpace (OpenFile * executable)
     numPages = divRoundUp (size, PageSize);
     size = numPages * PageSize;
 
-    ASSERT (numPages <= NumPhysPages);	// check we're not trying
+    ASSERT (numPages <= (unsigned int) frameProvider->NumAvailFrame());	// check we're not trying
     // to run anything too big --
     // at least until we have
     // virtual memory
 
-    DEBUG ('a', "Initializing address space, num pages %d, size %d\n",
+    DEBUG ('u', "Initializing address space, num pages %d, size %d\n",
 	   numPages, size);
 // first, set up the translation 
     pageTable = new TranslationEntry[numPages];
