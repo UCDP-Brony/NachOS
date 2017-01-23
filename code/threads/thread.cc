@@ -259,6 +259,24 @@ Thread::Sleep ()
 }
 
 //----------------------------------------------------------------------
+// Thread::Sandman
+// Weird mix between Sleep and Yield
+//----------------------------------------------------------------------
+void
+Thread::Sandman (int time)
+{
+	
+    ASSERT (this == currentThread);
+    IntStatus oldLevel = interrupt->SetLevel (IntOff);
+
+    DEBUG ('t', "Enter Sandman \"%s\"\n", getName ());	
+	//interrupt->Schedule(, , time, int); //programming an interrupt
+	this->Sleep ();	// Wait for the interrupt to wake us
+	(void) interrupt->SetLevel (oldLevel);
+}
+
+
+//----------------------------------------------------------------------
 // ThreadFinish, InterruptEnable, ThreadPrint
 //      Dummy functions because C++ does not allow a pointer to a member
 //      function.  So in order to do this, we create a dummy C function

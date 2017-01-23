@@ -180,7 +180,7 @@ main (int argc, char **argv)
 	if (!strcmp (*argv, "-o2"))
 	    {
 		ASSERT (argc > 1);
-		Delay (5);	// delay for 10 seconds
+		Delay (5);	// delay for 5 seconds
 		// to give the user time to 
 		// start up another nachos
 		CircleMail (atoi (*(argv + 1)));

@@ -100,6 +100,9 @@ class Thread
     // other thread is runnable
     void Sleep ();		// Put the thread to sleep and 
     // relinquish the processor
+	
+	void Sandman (int time);
+	
     void Finish ();		// The thread is done executing
 
     void CheckOverflow ();	// Check if thread has 

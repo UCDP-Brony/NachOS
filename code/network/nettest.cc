@@ -111,7 +111,7 @@ void CircleMail(int farAddr){
 			outMailHdr.to = 0;
 			outMailHdr.from = 1;
 			outMailHdr.length = strlen(buffer) + 1;
-			// Send the first message
+			// Send the message we previously received
 			postOffice->Send(outPktHdr, outMailHdr, buffer); 
 			
 		}
