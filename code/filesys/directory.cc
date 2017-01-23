@@ -35,8 +35,10 @@
 //	"size" is the number of entries in the directory
 //----------------------------------------------------------------------
 
-Directory::Directory(int size)
+Directory::Directory(int parentSector, int selfSector, int size)
 {
+    this.parentSector = parentSector;
+    this.selfSector = selfSector;
     table = new DirectoryEntry[size];
     tableSize = size;
     for (int i = 0; i < tableSize; i++)
@@ -127,7 +129,7 @@ Directory::Find(const char *name)
 //----------------------------------------------------------------------
 
 bool
-Directory::Add(const char *name, int newSector)
+Directory::Add(const char *name, int newSector, bool isDirectory)
 { 
     if (FindIndex(name) != -1)
 	return FALSE;
@@ -137,6 +139,7 @@ Directory::Add(const char *name, int newSector)
             table[i].inUse = TRUE;
             strncpy(table[i].name, name, FileNameMaxLen); 
             table[i].sector = newSector;
+            table[i].isDirectory = isDirectory;
         return TRUE;
 	}
     return FALSE;	// no space.  Fix when we have extensible files.
@@ -189,8 +192,16 @@ Directory::Print()
     for (int i = 0; i < tableSize; i++)
 	if (table[i].inUse) {
 	    printf("Name: %s, Sector: %d\n", table[i].name, table[i].sector);
-	    hdr->FetchFrom(table[i].sector);
-	    hdr->Print();
+        
+        if(!table[i].isDirectory){
+           hdr->FetchFrom(table[i].sector);
+	       hdr->Print();
+        }else{
+            Directory *d = new Directory;
+            d->FetchFrom(table[i].sector);
+            d->Print();
+            delete d;
+        }
 	}
     printf("\n");
     delete hdr;

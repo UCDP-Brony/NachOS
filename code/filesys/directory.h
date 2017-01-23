@@ -36,6 +36,7 @@ class DirectoryEntry {
 					//   FileHeader for this file 
     char name[FileNameMaxLen + 1];	// Text name for file, with +1 for 
 					// the trailing '\0'
+    bool isDirectory;
 };
 
 // The following class defines a UNIX-like "directory".  Each entry in
@@ -50,7 +51,7 @@ class DirectoryEntry {
 
 class Directory {
   public:
-    Directory(int size); 		// Initialize an empty directory
+    Directory(int parentSector, int selfSector, int size); 		// Initialize an empty directory
 					// with space for "size" files
     ~Directory();			// De-allocate the directory
 
@@ -72,6 +73,8 @@ class Directory {
 					//  names and their contents.
 
   private:
+    int parentSector;
+    int selfSector;
     int tableSize;			// Number of directory entries
     DirectoryEntry *table;		// Table of pairs: 
 					// <file name, file header location> 
