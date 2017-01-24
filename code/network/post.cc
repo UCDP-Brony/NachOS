@@ -424,10 +424,18 @@ bool PostOffice::ReceiveReliable(int box, PacketHeader *pktHdr,
 bool PostOffice::ReceiveReliable(int box, PacketHeader *pktHdr, 
 				MailHeader *mailHdr, char* data)
 {
+	
     ASSERT((box >= 0) && (box < numBoxes));
-	usleep(TEMPO*1000);
-	if(!boxes[box].TryGet(pktHdr, mailHdr, data))
+	usleep(TEMPO*1000000);
+	fflush(stdout);
+	if(!boxes[box].TryGet(pktHdr, mailHdr, data)){
+		printf("No mail yet \n");
+		fflush(stdout);
 		return false;
+	}
+	
     ASSERT(mailHdr->length <= MaxMailSize);
+	printf("We've mail ! \n");
+	fflush(stdout);
 	return true;
 }

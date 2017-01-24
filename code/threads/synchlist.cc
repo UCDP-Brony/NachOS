@@ -96,9 +96,10 @@ SynchList::TryRemove ()
     void *item;
 
     lock->Acquire ();		// enforce mutual exclusion
-    if(list->IsEmpty ())
+    if(list->IsEmpty ()){
+		lock->Release ();
 		return NULL;
-	listEmpty->Wait (lock);	// wait until list isn't empty
+	}
     item = list->Remove ();
     ASSERT (item != NULL);
     lock->Release ();

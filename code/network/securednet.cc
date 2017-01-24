@@ -31,9 +31,13 @@ void Receveur(int farAddr){
     MailHeader outMailHdr, inMailHdr;
     const char *ack = "Got it!";
     char buffer[MaxMailSize];
+	
 	//we don't get an ack of the ack so we have to do it this way atm
 	while(1){
+		fflush(stdout);
 		if(postOffice->ReceiveReliable(0, &inPktHdr, &inMailHdr, buffer)){
+			printf("Got \"%s\" from %d, box %d\n",buffer,inPktHdr.from,inMailHdr.from);
+			fflush(stdout);
 			outPktHdr.to = inPktHdr.from;
 			outMailHdr.to = inMailHdr.from;
 			outMailHdr.length = strlen(ack) + 1;
@@ -66,6 +70,8 @@ void Emetteur(int farAddr){
 		if(postOffice->ReceiveReliable(0, &inPktHdr, &inMailHdr, buffer))
 			success = true;
 		tentative++;
+		printf("Tentative numéro %i \n",tentative);
+		fflush(stdout);
 	}
 	if (!success){
 		printf("Failed to send the message : too many messages sent without ack \n");
