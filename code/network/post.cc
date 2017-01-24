@@ -256,11 +256,9 @@ PostOffice::PostalDelivery()
     PacketHeader pktHdr;
     MailHeader mailHdr;
     char *buffer = new char[MaxPacketSize];
-	printf("Yet another debug msg 1\n");
     for (;;) {
         // first, wait for a message
         messageAvailable->P();
-		printf("Yet another debug msg 2\n");
         pktHdr = network->Receive(buffer);
 
         mailHdr = *(MailHeader *)buffer;
@@ -274,7 +272,6 @@ PostOffice::PostalDelivery()
 	ASSERT(mailHdr.length <= MaxMailSize);
 
 	// put into mailbox
-	printf("Yet another debug msg 2\n");
 	
         boxes[mailHdr.to].Put(pktHdr, mailHdr, buffer + sizeof(MailHeader));
     }
@@ -298,9 +295,9 @@ PostOffice::Send(PacketHeader pktHdr, MailHeader mailHdr, const char* data)
 {
     char* buffer = new char[MaxPacketSize];	// space to hold concatenated
 						// mailHdr + data
-	printf("Post send: ");
+	/*printf("Post send: ");
 	PrintHeader(pktHdr, mailHdr);
-	fflush(stdout);
+	fflush(stdout);*/
     /*if (DebugIsEnabled('n')) {
 	printf("Post send: ");
 	PrintHeader(pktHdr, mailHdr);
@@ -325,8 +322,6 @@ PostOffice::Send(PacketHeader pktHdr, MailHeader mailHdr, const char* data)
 
     delete [] buffer;			// we've sent the message, so
 					// we can delete our buffer
-	printf("Out of send \n");
-	fflush(stdout);		
 }
 
 //----------------------------------------------------------------------
@@ -426,6 +421,8 @@ bool PostOffice::ReceiveReliable(int box, PacketHeader *pktHdr,
 	return true;
 }
 */
+
+
 
 bool PostOffice::ReceiveReliable(int box, PacketHeader *pktHdr, 
 				MailHeader *mailHdr, char* data, int delay)

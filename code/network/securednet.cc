@@ -22,7 +22,7 @@
 #include "post.h"
 #include "interrupt.h"
 
-#define MAXREEMISSIONS		100
+#define MAXREEMISSIONS		20
 
 #define TEMPO				2
 
@@ -33,8 +33,6 @@ void Receveur(int farAddr){
     MailHeader outMailHdr, inMailHdr;
     const char *ack = "Got it!";
     char buffer[MaxMailSize];
-	printf("Ad : %i \n",farAddr);
-			fflush(stdout);
 	//we don't get an ack of the ack so we have to do it this way atm
 	while(1){
 		//if(postOffice->ReceiveReliable(1, &inPktHdr, &inMailHdr, buffer,TEMPO/2)){
@@ -57,8 +55,6 @@ void Emetteur(int farAddr){
     MailHeader outMailHdr, inMailHdr;
     const char *data = "Hello there!";
     char buffer[MaxMailSize];
-	printf("Ad : %i \n",farAddr);
-	fflush(stdout);
 	// construct packet, mail header for original message
 	// To: destination machine, mailbox 0
 	// From: our machine, reply to: mailbox 1
@@ -85,7 +81,7 @@ void Emetteur(int farAddr){
 		printf("Failed to send the message : too many messages sent without ack \n");
 	}
 	else{
-		printf("Got \"%s\" from %d, box %d\n",buffer,inPktHdr.from,inMailHdr.from);
+		printf("Got \"%s\" from %d\n",buffer,inPktHdr.from);
 	}
 	fflush(stdout);
 	interrupt->Halt();
