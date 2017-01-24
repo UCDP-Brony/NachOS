@@ -22,7 +22,9 @@
 #include "post.h"
 #include "interrupt.h"
 
-#define MAXREEMISSIONS		5
+#define MAXREEMISSIONS		100
+
+#define TEMPO				2
 
 
 
@@ -31,18 +33,19 @@ void Receveur(int farAddr){
     MailHeader outMailHdr, inMailHdr;
     const char *ack = "Got it!";
     char buffer[MaxMailSize];
-	
+	printf("Ad : %i \n",farAddr);
+			fflush(stdout);
 	//we don't get an ack of the ack so we have to do it this way atm
 	while(1){
-		fflush(stdout);
-		if(postOffice->ReceiveReliable(0, &inPktHdr, &inMailHdr, buffer)){
+		//if(postOffice->ReceiveReliable(1, &inPktHdr, &inMailHdr, buffer,TEMPO/2)){
+			postOffice->Receive(1, &inPktHdr, &inMailHdr, buffer);
 			printf("Got \"%s\" from %d, box %d\n",buffer,inPktHdr.from,inMailHdr.from);
 			fflush(stdout);
 			outPktHdr.to = inPktHdr.from;
 			outMailHdr.to = inMailHdr.from;
 			outMailHdr.length = strlen(ack) + 1;
 			postOffice->Send(outPktHdr, outMailHdr, ack);
-		}
+		//}
 	}
 	
 	interrupt->Halt();
@@ -54,21 +57,26 @@ void Emetteur(int farAddr){
     MailHeader outMailHdr, inMailHdr;
     const char *data = "Hello there!";
     char buffer[MaxMailSize];
-	
+	printf("Ad : %i \n",farAddr);
+	fflush(stdout);
 	// construct packet, mail header for original message
 	// To: destination machine, mailbox 0
 	// From: our machine, reply to: mailbox 1
-	outPktHdr.to = farAddr;		
-	outMailHdr.to = 0;
-	outMailHdr.from = 1;
-	outMailHdr.length = strlen(data) + 1;
 	int tentative = 0;
 	bool success = false;
 	while (tentative<MAXREEMISSIONS && !success){
+		
+		
+		outPktHdr.to = farAddr;		
+		outMailHdr.to = 1;
+		outMailHdr.from = 0;
+		outMailHdr.length = strlen(data) + 1;
 		postOffice->Send(outPktHdr, outMailHdr, data);
 		
-		if(postOffice->ReceiveReliable(0, &inPktHdr, &inMailHdr, buffer))
+		if(postOffice->ReceiveReliable(0, &inPktHdr, &inMailHdr, buffer,TEMPO)){
+			//postOffice->Receive(0, &inPktHdr, &inMailHdr, buffer);
 			success = true;
+		}
 		tentative++;
 		printf("Tentative numéro %i \n",tentative);
 		fflush(stdout);

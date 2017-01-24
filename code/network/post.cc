@@ -26,7 +26,6 @@
 #include <unistd.h> /* used while Thread::Sandman doesn't work */
 
 
-#define TEMPO				2	
 
 //----------------------------------------------------------------------
 // Mail::Mail
@@ -106,8 +105,8 @@ PrintHeader(PacketHeader pktHdr, MailHeader mailHdr)
 void 
 MailBox::Put(PacketHeader pktHdr, MailHeader mailHdr, char *data)
 { 
-    Mail *mail = new Mail(pktHdr, mailHdr, data); 
-
+    Mail *mail = new Mail(pktHdr, mailHdr, data);
+		fflush(stdout);
     messages->Append((void *)mail);	// put on the end of the list of 
 					// arrived messages, and wake up 
 					// any waiters
@@ -257,10 +256,11 @@ PostOffice::PostalDelivery()
     PacketHeader pktHdr;
     MailHeader mailHdr;
     char *buffer = new char[MaxPacketSize];
-
+	printf("Yet another debug msg 1\n");
     for (;;) {
         // first, wait for a message
-        messageAvailable->P();	
+        messageAvailable->P();
+		printf("Yet another debug msg 2\n");
         pktHdr = network->Receive(buffer);
 
         mailHdr = *(MailHeader *)buffer;
@@ -274,6 +274,8 @@ PostOffice::PostalDelivery()
 	ASSERT(mailHdr.length <= MaxMailSize);
 
 	// put into mailbox
+	printf("Yet another debug msg 2\n");
+	
         boxes[mailHdr.to].Put(pktHdr, mailHdr, buffer + sizeof(MailHeader));
     }
 }
@@ -296,11 +298,13 @@ PostOffice::Send(PacketHeader pktHdr, MailHeader mailHdr, const char* data)
 {
     char* buffer = new char[MaxPacketSize];	// space to hold concatenated
 						// mailHdr + data
-
-    if (DebugIsEnabled('n')) {
 	printf("Post send: ");
 	PrintHeader(pktHdr, mailHdr);
-    }
+	fflush(stdout);
+    /*if (DebugIsEnabled('n')) {
+	printf("Post send: ");
+	PrintHeader(pktHdr, mailHdr);
+    }*/
     ASSERT(mailHdr.length <= MaxMailSize);
     ASSERT(0 <= mailHdr.to && mailHdr.to < numBoxes);
     
@@ -321,6 +325,8 @@ PostOffice::Send(PacketHeader pktHdr, MailHeader mailHdr, const char* data)
 
     delete [] buffer;			// we've sent the message, so
 					// we can delete our buffer
+	printf("Out of send \n");
+	fflush(stdout);		
 }
 
 //----------------------------------------------------------------------
@@ -422,11 +428,11 @@ bool PostOffice::ReceiveReliable(int box, PacketHeader *pktHdr,
 */
 
 bool PostOffice::ReceiveReliable(int box, PacketHeader *pktHdr, 
-				MailHeader *mailHdr, char* data)
+				MailHeader *mailHdr, char* data, int delay)
 {
 	
     ASSERT((box >= 0) && (box < numBoxes));
-	usleep(TEMPO*1000000);
+	usleep(delay*1000000);
 	fflush(stdout);
 	if(!boxes[box].TryGet(pktHdr, mailHdr, data)){
 		printf("No mail yet \n");
