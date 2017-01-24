@@ -19,8 +19,14 @@
 #include "copyright.h"
 #include "post.h"
 #include "thread.h"
+#include "system.h"
 
 #include <strings.h> /* for bzero */
+
+#include <unistd.h> /* used while Thread::Sandman doesn't work */
+
+
+#define TEMPO				2	
 
 //----------------------------------------------------------------------
 // Mail::Mail
@@ -138,6 +144,32 @@ MailBox::Get(PacketHeader *pktHdr, MailHeader *mailHdr, char *data)
     delete mail;			// we've copied out the stuff we
 					// need, we can now discard the message
 }
+
+ 
+bool MailBox::TryGet(PacketHeader *pktHdr, MailHeader *mailHdr, char *data) 
+{ 
+    Mail *mail = (Mail *) messages->TryRemove();	// remove message from list;
+	if(mail == NULL){
+		delete mail;
+		return false;
+	}
+	*pktHdr = mail->pktHdr;
+    *mailHdr = mail->mailHdr;
+    if (DebugIsEnabled('n')) {
+	printf("Got mail from mailbox: ");
+	PrintHeader(*pktHdr, *mailHdr);
+    }
+    bcopy(mail->data, data, mail->mailHdr.length);
+					// copy the message data into
+					// the caller's buffer
+    delete mail;			// we've copied out the stuff we
+					// need, we can now discard the message
+	return true;
+}
+
+
+
+
 
 //----------------------------------------------------------------------
 // PostalHelper, ReadAvail, WriteDone
@@ -351,4 +383,51 @@ PostOffice::PacketSent()
 //----------------------------------------------------------------------
 bool PostOffice::IsOrigin(){
 	return (0 == netAddr);
+}
+
+/*
+
+
+
+bool PostOffice::ReceiveReliable(int box, PacketHeader *pktHdr, 
+				MailHeader *mailHdr, char* data)
+{
+    ASSERT((box >= 0) && (box < numBoxes));
+	lock = new Lock ("take me down to the paradise city where the grass is green and this is working");
+	lock->Acquire ();
+	//set timeout
+	alarm[box].Wait(lock); //wait for incoming message or timeout
+	Mail *mail = (Mail *) messages->TryRemove();	// remove message from list;
+	lock->Release ();
+	if(mail == NULL){
+		delete mail;
+		delete lock;
+		return false;
+	}
+	*pktHdr = mail->pktHdr;
+    *mailHdr = mail->mailHdr;
+    if (DebugIsEnabled('n')) {
+	printf("Got mail from mailbox: ");
+	PrintHeader(*pktHdr, *mailHdr);
+    }
+    bcopy(mail->data, data, mail->mailHdr.length);
+					// copy the message data into
+					// the caller's buffer
+    delete mail;			// we've copied out the stuff we
+					// need, we can now discard the message
+	delete lock;
+    ASSERT(mailHdr->length <= MaxMailSize);
+	return true;
+}
+*/
+
+bool PostOffice::ReceiveReliable(int box, PacketHeader *pktHdr, 
+				MailHeader *mailHdr, char* data)
+{
+    ASSERT((box >= 0) && (box < numBoxes));
+	usleep(TEMPO*1000);
+	if(!boxes[box].TryGet(pktHdr, mailHdr, data))
+		return false;
+    ASSERT(mailHdr->length <= MaxMailSize);
+	return true;
 }

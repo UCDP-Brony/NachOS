@@ -32,6 +32,9 @@ class SynchList
     void *Remove ();		// remove the first item from the front of
     // the list, waiting if the list is empty
     // apply function to every item in the list
+	void *TryRemove ();		// try to remove the first item from the front of
+    // the list, return NULL if the list is empty
+    // apply function to every item in the list
     void Mapcar (VoidFunctionPtr func);
 
   private:

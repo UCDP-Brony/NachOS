@@ -81,6 +81,30 @@ SynchList::Remove ()
     return item;
 }
 
+
+//----------------------------------------------------------------------
+// SynchList::TryRemove
+//      Try to remove an "item" from the beginning of the list.  Wait if
+//      the list is empty.
+// Returns:
+//      The removed item or NULL if the List is empty
+//----------------------------------------------------------------------
+
+void *
+SynchList::TryRemove ()
+{
+    void *item;
+
+    lock->Acquire ();		// enforce mutual exclusion
+    if(list->IsEmpty ())
+		return NULL;
+	listEmpty->Wait (lock);	// wait until list isn't empty
+    item = list->Remove ();
+    ASSERT (item != NULL);
+    lock->Release ();
+    return item;
+}
+
 //----------------------------------------------------------------------
 // SynchList::Mapcar
 //      Apply function to every item on the list.  Obey mutual exclusion

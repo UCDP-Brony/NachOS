@@ -22,26 +22,24 @@
 #include "post.h"
 #include "interrupt.h"
 
-#define TEMPO				2	
 #define MAXREEMISSIONS		5
 
 
-
-void
-MailSecured(int farAddr)
-{
 
 void Receveur(int farAddr){
 	PacketHeader outPktHdr, inPktHdr;
     MailHeader outMailHdr, inMailHdr;
     const char *ack = "Got it!";
     char buffer[MaxMailSize];
-	
-	
-	outPktHdr.to = inPktHdr.from;
-	outMailHdr.to = inMailHdr.from;
-	outMailHdr.length = strlen(ack) + 1;
-	postOffice->Send(outPktHdr, outMailHdr, ack);
+	//we don't get an ack of the ack so we have to do it this way atm
+	while(1){
+		if(postOffice->ReceiveReliable(0, &inPktHdr, &inMailHdr, buffer)){
+			outPktHdr.to = inPktHdr.from;
+			outMailHdr.to = inMailHdr.from;
+			outMailHdr.length = strlen(ack) + 1;
+			postOffice->Send(outPktHdr, outMailHdr, ack);
+		}
+	}
 	
 	interrupt->Halt();
 }
@@ -51,7 +49,6 @@ void Emetteur(int farAddr){
 	PacketHeader outPktHdr, inPktHdr;
     MailHeader outMailHdr, inMailHdr;
     const char *data = "Hello there!";
-    const char *ack = "Got it!";
     char buffer[MaxMailSize];
 	
 	// construct packet, mail header for original message
@@ -61,16 +58,22 @@ void Emetteur(int farAddr){
 	outMailHdr.to = 0;
 	outMailHdr.from = 1;
 	outMailHdr.length = strlen(data) + 1;
-	int tentative;
-	bool success;
+	int tentative = 0;
+	bool success = false;
 	while (tentative<MAXREEMISSIONS && !success){
-		// Send the first message
 		postOffice->Send(outPktHdr, outMailHdr, data);
+		
+		if(postOffice->ReceiveReliable(0, &inPktHdr, &inMailHdr, buffer))
+			success = true;
+		tentative++;
 	}
 	if (!success){
 		printf("Failed to send the message : too many messages sent without ack \n");
-		fflush(stdout);
 	}
+	else{
+		printf("Got \"%s\" from %d, box %d\n",buffer,inPktHdr.from,inMailHdr.from);
+	}
+	fflush(stdout);
 	interrupt->Halt();
 }
 
