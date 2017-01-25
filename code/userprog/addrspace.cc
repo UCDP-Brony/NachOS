@@ -108,8 +108,8 @@ AddrSpace::AddrSpace (OpenFile * executable)
 
     for (i = 0; i < numPages; i++)
       {
-	  pageTable[i].virtualPage = i;	// for now, virtual page # = phys page #
-	  pageTable[i].physicalPage = frameProvider->GetEmptyFrame();
+	  pageTable[i].virtualPage = i;	
+	  pageTable[i].physicalPage = frameProvider->GetEmptyFrame();      // We now use our memory manager.
 	  pageTable[i].valid = TRUE;
 	  pageTable[i].use = FALSE;
 	  pageTable[i].dirty = FALSE;
@@ -156,7 +156,7 @@ AddrSpace::~AddrSpace ()
     // LB: Missing [] for delete
     // delete pageTable;
     for (unsigned int i = 0; i < numPages; i++){
-        frameProvider->ReleaseFrame(pageTable[i].physicalPage);
+        frameProvider->ReleaseFrame(pageTable[i].physicalPage); // update the memory manager
     } 
     delete [] pageTable;
     // End of modification
@@ -223,6 +223,17 @@ AddrSpace::RestoreState ()
     machine->pageTableSize = numPages;
 }
 
+//----------------------------------------------------------------------
+// AddrSpace::addThreadToList
+//      Add a thread to threadList.
+//
+//      Add a thread in the first available slot. An available slot is a slot with a thread value of -1.
+//      
+//      Return true if it found a slot, false otherwise.
+//
+//      "t" is a pointer to the thread to add.
+//----------------------------------------------------------------------
+
 bool AddrSpace::addThreadToList(void* t){
     int i;
     for(i=0;i<MaxThreads;i++){
@@ -237,6 +248,15 @@ bool AddrSpace::addThreadToList(void* t){
     return false;
 }
 
+//----------------------------------------------------------------------
+// AddrSpace::removeThreadFromList
+//      Remove the thread from threadList.
+//
+//      Remove the thread and set its slot to available. An available slot is a slot with a thread value of -1.
+//
+//      "t" is a pointer to the thread to remove.
+//----------------------------------------------------------------------
+
 void AddrSpace::removeThreadFromList(void* t){
     ThreadCond* tc = findThreadInList(t);
     if(tc != (void*)-1){
@@ -245,6 +265,16 @@ void AddrSpace::removeThreadFromList(void* t){
         tc->mutex->Release();
     }
 }
+
+//----------------------------------------------------------------------
+// AddrSpace::findThreadInList
+//      Find the thread in threadList.
+//
+//      Look for the thread in threadList.
+//      Return the ThreadCond structure associated with the thread if successful, -1 otherwise.
+//
+//      "t" is a pointer to the thread to find.
+//----------------------------------------------------------------------
 
 ThreadCond* AddrSpace::findThreadInList(void* t){
     int i;
@@ -258,6 +288,16 @@ ThreadCond* AddrSpace::findThreadInList(void* t){
     }
     return (ThreadCond*)-1;
 }
+
+//----------------------------------------------------------------------
+// AddrSpace::getThreadID
+//      Find the thread in threadList.
+//
+//      Look for the thread in threadList.
+//      Return the position in the threadList array of the thread if successful, -1 otherwise.
+//
+//      "t" is a pointer to the thread to find.
+//----------------------------------------------------------------------
 
 int AddrSpace::getThreadID(void* t){
     int i;

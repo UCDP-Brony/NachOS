@@ -40,17 +40,17 @@ class AddrSpace
     void SaveState ();		// Save/restore address space-specific
     void RestoreState ();	// info on a context switch 
 
-    bool addThreadToList(void* t);
-    void removeThreadFromList(void* t);
-    ThreadCond* findThreadInList(void* t);
-    int getThreadID(void* t);
+    bool addThreadToList(void* t);          // add a thread to threadList table
+    void removeThreadFromList(void* t);     // remove a thread from the threadList table
+    ThreadCond* findThreadInList(void* t);  // find a thread in the threadList table
+    int getThreadID(void* t);               // return the position of the thread in threadList table
 
   private:
     TranslationEntry * pageTable;	// Assume linear page table translation
     // for now!
     unsigned int numPages;	// Number of pages in the virtual 
     // address space
-    ThreadCond threadList[MaxThreads];
+    ThreadCond threadList[MaxThreads];      // array containing threads with their associated Lock and Condition
 };
 
 #endif // ADDRSPACE_H
