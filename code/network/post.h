@@ -132,7 +132,8 @@ class PostOffice {
 	bool IsOrigin();
 	
 	bool ReceiveReliable(int box, PacketHeader *pktHdr, 
-		MailHeader *mailHdr, char *data);
+		MailHeader *mailHdr, char *data, int delay);
+			// Try to retrieve a message from "box".  Return true if there was a message, else false
 
   private:
     Network *network;		// Physical network connection
