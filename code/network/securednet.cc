@@ -3,8 +3,8 @@
 //
 //	Two caveats:
 //	  1. Two copies of Nachos must be running, with machine ID's 0 and 1:
-//		./nachos -m 0 -o 1 &
-//		./nachos -m 1 -o 0 &
+//		./nachos -m 0 -o3 1 &
+//		./nachos -m 1 -o4 0 &
 //
 //	  2. You need an implementation of condition variables,
 //	     which is *not* provided as part of the baseline threads 
@@ -27,15 +27,15 @@
 #define TEMPO				2
 
 
-
+// Server
+// 
 void Receveur(int farAddr){
 	PacketHeader outPktHdr, inPktHdr;
     MailHeader outMailHdr, inMailHdr;
     const char *ack = "Got it!";
     char buffer[MaxMailSize];
-	//we don't get an ack of the ack so we have to do it this way atm
+	//start looping waiting for a packet
 	while(1){
-		//if(postOffice->ReceiveReliable(1, &inPktHdr, &inMailHdr, buffer,TEMPO/2)){
 			postOffice->Receive(1, &inPktHdr, &inMailHdr, buffer);
 			printf("Got \"%s\" from %d, box %d\n",buffer,inPktHdr.from,inMailHdr.from);
 			fflush(stdout);
@@ -43,12 +43,12 @@ void Receveur(int farAddr){
 			outMailHdr.to = inMailHdr.from;
 			outMailHdr.length = strlen(ack) + 1;
 			postOffice->Send(outPktHdr, outMailHdr, ack);
-		//}
 	}
-	
+	//not reached
 	interrupt->Halt();
 }
 
+// Client
 void Emetteur(int farAddr){
 	
 	PacketHeader outPktHdr, inPktHdr;
@@ -70,7 +70,6 @@ void Emetteur(int farAddr){
 		postOffice->Send(outPktHdr, outMailHdr, data);
 		
 		if(postOffice->ReceiveReliable(0, &inPktHdr, &inMailHdr, buffer,TEMPO)){
-			//postOffice->Receive(0, &inPktHdr, &inMailHdr, buffer);
 			success = true;
 		}
 		tentative++;

@@ -377,16 +377,51 @@ PostOffice::PacketSent()
 { 
     messageSent->V();
 }
-
 //----------------------------------------------------------------------
 //PostOffice::IsOrigin
-//
+//	
 //----------------------------------------------------------------------
 bool PostOffice::IsOrigin(){
 	return (0 == netAddr);
 }
 
-/*
+//----------------------------------------------------------------------
+// PostOffice::ReceiveReliable
+// 	Try to retrieve a message from a specific box if one is available 
+//  Return true if we succeeded, else return false
+//
+//	Note that the MailHeader + data looks just like normal payload
+//	data to the Network.
+//
+//
+//	"box" -- mailbox ID in which to look for message
+//	"pktHdr" -- address to put: source, destination machine ID's
+//	"mailHdr" -- address to put: source, destination mailbox ID's
+//	"data" -- address to put: payload message data
+//----------------------------------------------------------------------
+bool PostOffice::ReceiveReliable(int box, PacketHeader *pktHdr, 
+				MailHeader *mailHdr, char* data, int delay)
+{
+	
+    ASSERT((box >= 0) && (box < numBoxes));
+	usleep(delay*1000000);
+	fflush(stdout);
+	if(!boxes[box].TryGet(pktHdr, mailHdr, data)){
+		printf("No mail yet \n");
+		fflush(stdout);
+		return false;
+	}
+	
+    ASSERT(mailHdr->length <= MaxMailSize);
+	printf("We've mail ! \n");
+	fflush(stdout);
+	return true;
+}
+
+
+
+
+/* attempt 
 
 
 
@@ -396,7 +431,7 @@ bool PostOffice::ReceiveReliable(int box, PacketHeader *pktHdr,
     ASSERT((box >= 0) && (box < numBoxes));
 	lock = new Lock ("take me down to the paradise city where the grass is green and this is working");
 	lock->Acquire ();
-	//set timeout
+	//add function to set a timeout here+handler when a message is received
 	alarm[box].Wait(lock); //wait for incoming message or timeout
 	Mail *mail = (Mail *) messages->TryRemove();	// remove message from list;
 	lock->Release ();
@@ -423,22 +458,3 @@ bool PostOffice::ReceiveReliable(int box, PacketHeader *pktHdr,
 */
 
 
-
-bool PostOffice::ReceiveReliable(int box, PacketHeader *pktHdr, 
-				MailHeader *mailHdr, char* data, int delay)
-{
-	
-    ASSERT((box >= 0) && (box < numBoxes));
-	usleep(delay*1000000);
-	fflush(stdout);
-	if(!boxes[box].TryGet(pktHdr, mailHdr, data)){
-		printf("No mail yet \n");
-		fflush(stdout);
-		return false;
-	}
-	
-    ASSERT(mailHdr->length <= MaxMailSize);
-	printf("We've mail ! \n");
-	fflush(stdout);
-	return true;
-}

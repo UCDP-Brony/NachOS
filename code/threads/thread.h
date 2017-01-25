@@ -101,7 +101,8 @@ class Thread
     void Sleep ();		// Put the thread to sleep and 
     // relinquish the processor
 	
-	void Sandman (int time);
+	void Sandman (int time); // Put the thread to sleep and 
+    // relinquish the processor for "time" seconds
 	
     void Finish ();		// The thread is done executing
 

@@ -264,6 +264,7 @@ Thread::Sleep ()
 //----------------------------------------------------------------------
 // Thread::Sandman
 // Weird mix between Sleep and Yield
+// Currently not working
 //----------------------------------------------------------------------
 void
 Thread::Sandman (int time)
