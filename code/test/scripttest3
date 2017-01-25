@@ -1,0 +1,7 @@
+(
+cd ../build;
+echo "On passe un \"Hello Chat!\# en paramètre. Le programme doit nous rendre \"Hello Chat!\". Il nous rend : ";
+echo "Hello Chat!" | ./nachos-step3 -x ./teststring;
+)
+
+exit

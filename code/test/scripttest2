@@ -1,0 +1,7 @@
+(
+cd ../build;
+echo "On passe un\"1\" en paramètre. Le programme doit nous rendre \"1\". Il nous rend : ";
+echo 1 | ./nachos-step3 -x ./testinteger;
+)
+
+exit
