@@ -86,6 +86,7 @@ class MailBox {
    				// Atomically get a message out of the 
 				// mailbox (and wait if there is no message 
 				// to get!)
+	bool TryGet(PacketHeader *pktHdr, MailHeader *mailHdr, char *data);
   private:
     SynchList *messages;	// A mailbox is just a list of arrived messages
 };
@@ -127,6 +128,11 @@ class PostOffice {
    				// packet has arrived and can be pulled
 				// off of network (i.e., time to call 
 				// PostalDelivery)
+				
+	bool IsOrigin();
+	
+	bool ReceiveReliable(int box, PacketHeader *pktHdr, 
+		MailHeader *mailHdr, char *data);
 
   private:
     Network *network;		// Physical network connection

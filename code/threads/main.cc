@@ -53,7 +53,6 @@
 #include "utility.h"
 #include "system.h"
 
-
 // External functions used by this file
 
 extern void ThreadTest (void), Copy (const char *unixFile, const char *nachosFile);
@@ -63,6 +62,9 @@ extern void StartProcess (char *file), ConsoleTest (char *in, char *out);
 extern void SynchConsoleTest (char *in, char *out);
 #endif
 extern void MailTest (int networkID);
+extern void CircleMail (int networkID);
+extern void Receveur (int networkID);
+extern void Emetteur  (int networkID);
 
 //----------------------------------------------------------------------
 // main
@@ -170,10 +172,39 @@ main (int argc, char **argv)
 	  if (!strcmp (*argv, "-o"))
 	    {
 		ASSERT (argc > 1);
-		Delay (2);	// delay for 2 seconds
+		Delay (5);	// delay for 10 seconds
 		// to give the user time to 
 		// start up another nachos
 		MailTest (atoi (*(argv + 1)));
+		argCount = 2;
+	    }
+	if (!strcmp (*argv, "-o2"))
+	    {
+		ASSERT (argc > 1);
+		Delay (5);	// delay for 5 seconds
+		// to give the user time to 
+		// start up another nachos
+		CircleMail (atoi (*(argv + 1)));
+		argCount = 2;
+	    }
+	// sender
+	if (!strcmp (*argv, "-o3"))
+	    {
+		ASSERT (argc > 1);
+		Delay (5);	// delay for 5 seconds
+		// to give the user time to 
+		// start up another nachos
+		Emetteur (atoi (*(argv + 1)));
+		argCount = 2;
+	    }
+	// receiver
+	if (!strcmp (*argv, "-o4"))
+	    {
+		ASSERT (argc > 1);
+		Delay (5);	// delay for 5 seconds
+		// to give the user time to 
+		// start up another nachos
+		Receveur (atoi (*(argv + 1)));
 		argCount = 2;
 	    }
 #endif // NETWORK
